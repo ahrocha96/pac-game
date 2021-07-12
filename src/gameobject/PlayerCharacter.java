@@ -7,15 +7,21 @@ import javax.swing.ImageIcon;
 
 public class PlayerCharacter extends GameObject {
 	
-	//dx = direction
+	// dx/dy = direction
 	
-	String iconFileLocation;
-	String iconFileName;
-	public String playerDirection;
+	public int requested_dx=0;
+	public int requested_dy=0;
+	public int requestCounter = 0;
 	
 	public int currentAnimationFrame;
 	private int animationDelay = 0;
 	
+	public boolean changingDirection = false;
+	
+	String iconFileLocation;
+	String iconFileName;
+	String playerDirection;
+	public String requestedDirection;
 	
 	public PlayerCharacter(int starting_x_position, int starting_y_position) {
 		super(starting_x_position, starting_y_position);
@@ -81,41 +87,41 @@ public class PlayerCharacter extends GameObject {
 		return hitbox = new Rectangle(x_pos, y_pos, width-6, height-3);
 	}
 	
-	private void updateIconFile(String location, String fileName, int frameNumber) {
-		iconFileName =  location + fileName + Integer.toString(frameNumber) + ".png";
+	private void updateIconFile(String location, String direction, int frameNumber) {
+		iconFileName =  location + "Player_" + direction + Integer.toString(frameNumber) + ".png";
 	}
 	
+	private void requestDirectionChange(int requested_dx, int requested_dy, String requestedDirection) {
+		this.requested_dx = requested_dx;
+    	this.requested_dy = requested_dy;
+        this.requestedDirection = requestedDirection;
+
+    	requestCounter = 30;
+    	changingDirection = true;
+	}
+	
+	public void setPlayerDirection(String playerDirection) {
+		this.playerDirection = playerDirection;
+	}
 	
 	public void keyPressed(KeyEvent e) {
 
         int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_A) {
-        	
-            x_direction = -2;
-            y_direction = 0;
-            playerDirection = "Player_Left";
+        	requestDirectionChange(-2, 0, "Left");
         }
 
         if (key == KeyEvent.VK_D) {
-        	
-            x_direction = 2;
-            y_direction = 0;
-            playerDirection = "Player_Right";
+        	requestDirectionChange(2, 0, "Right");
         }
 
         if (key == KeyEvent.VK_W) {
-        	
-            y_direction = -2;
-            x_direction = 0;
-            playerDirection = "Player_Up";
+        	requestDirectionChange(0, -2, "Up");
         }
 
         if (key == KeyEvent.VK_S) {
-        	
-            y_direction = 2;
-            x_direction = 0;
-            playerDirection = "Player_Down";
+        	requestDirectionChange(0, 2, "Down");
         }
     }
 }

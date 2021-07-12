@@ -14,7 +14,6 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import gameobject.GameObject;
 import gameobject.PlayerCharacter;
 import gameobject.Point;
 import gameobject.Wall;
@@ -123,38 +122,55 @@ public class Board extends JPanel implements ActionListener{
 		
 		checkCollisions();
 		
+		if(player.changingDirection) {
+			processPlayerDirectionChange();
+		}
+		
 		movePlayer();
 		
 		repaint();
+	}
+	
+	private void processPlayerDirectionChange() {
+	    boolean collisionInNewDirection = false;
+
+		player.requestCounter--;
+		if(player.requestCounter <= 0) {
+			player.changingDirection = false;
+		}
+		collisionInNewDirection = cd.checkFuturePlayerWallCollision(player.requested_dx, player.requested_dy);
+    	if (collisionInNewDirection == false) {
+    		player.setX_direction(player.requested_dx);
+			player.setY_direction(player.requested_dy);
+			player.setPlayerDirection(player.requestedDirection); 
+			player.changingDirection = false;
+    	}
 	}
 	
     private void movePlayer() {
         player.move();        
     }     
     
-    private void checkCollisions() {
-
-    	cd.checkBoardBounds();
-    	cd.checkPlayerWallCollision();
-    	cd.checkPlayerPointCollision();
-    	
+    public void stopPlayerMovement() {
+    	player.stopMoving();
     }
     
-   
+    private void checkCollisions() {
+    	cd.checkBoardBounds();
+    	cd.checkPlayerWallCollision();
+    	cd.checkPlayerPointCollision();	
+    }
   
     private void updatePlayerTile() {
     	for(int i = 0; i < tiles.length; i++) {
     		for (int j = 0; j < tiles[i].length; j++) {
         		if (player.getHitbox().intersects(tiles[i][j].getHitbox())) {
-        			tiles[player.getTile_y()][player.getTile_x()].gameObject = null;
         			player.setTile_x(j);
         			player.setTile_y(i);
         		}    		
     		}
     	}
     }
-    
-
     
     class GameKeyAdapter extends KeyAdapter {
 
@@ -164,7 +180,7 @@ public class Board extends JPanel implements ActionListener{
         }
     }
 	
-	public void placeGameObjects() {
+	private void placeGameObjects() {
 		
 		//rows
 		for(int i = 0; i < tiles.length; i++) {
@@ -172,28 +188,23 @@ public class Board extends JPanel implements ActionListener{
 			for(int j = 0; j < tiles[i].length; j++) {
 				
 				tiles[i][j] = new Tile(j, i);
-				GameObject obj;
 				
 				//TODO: Explore best ways to store level data to read in and then convert to 2d array. Maybe JSON?
 				if(levelData[i][j].equals("Wall")) {
-					obj = new Wall(j*20, i*20);
-					maze.add((Wall) obj);	
+					Wall w = new Wall(j*20, i*20);
+					maze.add(w);	
 				}
 				else if (levelData[i][j].equals("Player")){
 					player = new PlayerCharacter(j*20, i*20);
-					obj = player;
 				}
 				else {
-					obj = new Point(j*20, i*20);
-					points.add((Point) obj);
+					Point p = new Point(j*20, i*20);
+					points.add(p);
 				}
-				
-				tiles[i][j].gameObject =  obj;
-			
+							
 			}
 		}
 	}
-	
 	
 	private String[][] levelData = {
 			{"Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall"}, 
@@ -208,7 +219,7 @@ public class Board extends JPanel implements ActionListener{
 			{"Wall", "null", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall", "Point", "Point", "Point", "Point"},
 			{"Wall", "null", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall", "Point", "Point", "Point", "Point"},
 			{"Wall", "null", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall", "Point", "Point", "Point", "Point"},
-			{"Wall", "null", "Point", "Point", "Point", "Point", "Player", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall", "Point", "Point", "Point", "Point"},
+			{"Wall", "null", "Point", "Point", "Point", "Point", "Wall", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Player", "Wall", "Point", "Point", "Point", "Point"},
 			{"Wall", "null", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall", "Point", "Point", "Point", "Point"},
 			{"Wall", "null", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall", "Point", "Point", "Point", "Point"},
 			{"Wall", "null", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall", "Point", "Point", "Point", "Point"},
@@ -226,7 +237,6 @@ public class Board extends JPanel implements ActionListener{
 			{"Wall", "null", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall", "Point", "Point", "Point", "Point"},
 			{"Wall", "null", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall", "Point", "Point", "Point", "Point"},
 			{"Wall", "null", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall", "Point", "Point", "Point", "Point"},
-			{"Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall"}, 
-
+			{"Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall"},
 		};
 }

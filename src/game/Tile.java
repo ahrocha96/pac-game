@@ -2,17 +2,13 @@ package game;
 
 import java.awt.Rectangle;
 
-import gameobject.GameObject;
-
 public class Tile {
 		
 	private int width;
 	private int height;
 	private int x_position;
 	private int y_position;
-	
-	public GameObject gameObject;
-	
+		
 	private Rectangle hitbox;
 		
 	public Tile (int x_position, int y_position) {
