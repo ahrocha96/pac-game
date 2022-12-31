@@ -15,8 +15,8 @@ public class CollisionDetector {
     	else if (board.player.getX_position() < 0) {
     		board.player.setX_position(0);
     	}
-    	else if (board.player.getY_position() > 540) {
-    		board.player.setY_position(540);
+    	else if (board.player.getY_position() > 580) {
+    		board.player.setY_position(580);
     	}
     	else if (board.player.getY_position() < 0) {
     		board.player.setY_position(0);

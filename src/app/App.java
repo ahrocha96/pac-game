@@ -6,7 +6,7 @@ import game.Board;
 
 public class App {
 	
-	public static final int height = 620;
+	public static final int height = 660;
 	public static final int width = 575;
 	
 	JFrame frame;
