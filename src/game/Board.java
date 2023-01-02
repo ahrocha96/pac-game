@@ -38,7 +38,6 @@ public class Board extends JPanel implements ActionListener{
     PlayerCharacter player;
     Enemy ghost;
     List<Point> points;
-    //List<Wall> maze;
     HashMap<String, Wall> maze;
     Statistics  gameStats;
     
@@ -194,131 +193,86 @@ public class Board extends JPanel implements ActionListener{
     	
     	boolean pUp, pDown, pRight, pLeft;
     	pUp = pDown = pRight = pLeft = false;
-    	boolean direction;
-    	
-    	if(true) {
-    		if (px > gx && py < gy) {
-        		pRight = pUp = true;
-        		if(ghostCanMoveUp()) {
-        			ghost.requestDirectionChange(0, -2, "Up");
-        		}
-        		else if(ghostCanMoveRight()) {
-        			ghost.requestDirectionChange(2, 0, "Right");
-
-        		}
-        		else if(ghostCanMoveLeft()) {
-        			ghost.requestDirectionChange(-2, 0, "Left");
-        		}
-        		else if(ghostCanMoveDown()) {
-        			ghost.requestDirectionChange(0, 2, "Down");
-        		}
-        		
+    	if(!ghost.moving()) {
+    		if(px > gx && py < gy) {
+    			checkGhostDirectionOrder("Up", "Right", "Down", "Left");
         	}
-        	else if (px > gx && py > gy) {
-        		pRight = pDown = true;
-        		if(ghostCanMoveRight()) {
-        			ghost.requestDirectionChange(2, 0, "Right");
-
-        		}
-        		else if(ghostCanMoveDown()) {
-        			ghost.requestDirectionChange(0, 2, "Down");
-        		}
-        		else if(ghostCanMoveUp()) {
-        			ghost.requestDirectionChange(0, -2, "Up");
-        		}
-        		
-        		else if(ghostCanMoveLeft()) {
-        			ghost.requestDirectionChange(-2, 0, "Left");
-        		}
-        		
-        	}
+        	else if(px < gx && py < gy) {
+    			checkGhostDirectionOrder("Up", "Left", "Down", "Right");	
+    		}
         	else if(px > gx && py == gy) {
-        		pRight = true;
-        		if(ghostCanMoveRight()) {
-        			ghost.requestDirectionChange(2, 0, "Right");
+    			checkGhostDirectionOrder("Right", "Up", "Left", "Down");
+    		}
+        	else if(px < gx && py == gy) {
+    			checkGhostDirectionOrder("Left", "Down", "Right", "Up");
+    		}
+        	else if(px < gx && py > gy) {
+    			checkGhostDirectionOrder("Down", "Left", "Up", "Right");
+    		}
+        	else if(px > gx && py > gy) {
+    			checkGhostDirectionOrder("Down", "Right", "Up", "Left");
+    	
+    		}
+        	else if(px == gx && py < gy) {
+    			checkGhostDirectionOrder("Up", "Right", "Down", "Left");
+    	
+    		}
+        	else if(px == gx && py > gy) {
+    			checkGhostDirectionOrder("Down", "Left", "Up", "Right");
 
-        		}
-        		else if(ghostCanMoveDown()) {
-        			ghost.requestDirectionChange(0, 2, "Down");
-        		}
-        		else if(ghostCanMoveUp()) {
-        			ghost.requestDirectionChange(0, -2, "Up");
-        		}
-        		
-        		else if(ghostCanMoveLeft()) {
-        			ghost.requestDirectionChange(-2, 0, "Left");
-        		}
-        	}
-        	else if (px < gx && py < gy) {
-        		pLeft = pUp = true;
-        		if(ghostCanMoveLeft()) {
-        			ghost.requestDirectionChange(-2, 0, "Left");
-        		}
-        		
-        		else if(ghostCanMoveUp()) {
-        			ghost.requestDirectionChange(0, -2, "Up");
-        		}
-        		
-        		else if(ghostCanMoveDown()) {
-        			ghost.requestDirectionChange(0, 2, "Down");
-        		}
-        		
-        		
-        		else if(ghostCanMoveRight()) {
-        			ghost.requestDirectionChange(2, 0, "Right");
-
-        		}
-        	}
-        	else if (px < gx && py > gy) {
-        		pLeft = pDown = true;
-        		if(ghostCanMoveLeft()) {
-        			ghost.requestDirectionChange(-2, 0, "Left");
-        		}
-        		else if(ghostCanMoveDown()) {
-        			ghost.requestDirectionChange(0, 2, "Down");
-        		}
-        		
-        		else if(ghostCanMoveUp()) {
-        			ghost.requestDirectionChange(0, -2, "Up");
-        		}
-        		
-        		
-        		
-        		
-        		else if(ghostCanMoveRight()) {
-        			ghost.requestDirectionChange(2, 0, "Right");
-
-        		}
-        	}
-        	else if (px < gx && py == gy) {
-        		pLeft = true;
-        	}
-        	else if (px == gx && py > gy) {
-        		pUp = true;
-        	}
-        	else if (px == gx && py < gy) {
-        		pDown = true;
-        	}	
+    		}	
     	}
     	
+    }
+    
+    public void checkGhostDirectionOrder(String one, String two, String three, String four) {
+    	if (ghostCanMoveDirection(one)) {
+			ghost.requestDirectionChange(one);
+
+    	}
+    	else if(ghostCanMoveDirection(two)) {
+			ghost.requestDirectionChange(two);
+
+    	}
+    	else if(ghostCanMoveDirection(three)) {
+			ghost.requestDirectionChange(three);
+
+    	}
+    	else if(ghostCanMoveDirection(four)) {
+			ghost.requestDirectionChange(four);
+    	}
+    }
+    
+    public boolean ghostCanMoveDirection(String direction) {
+    	int tilex = 0;;
+    	int tiley = 0;
     	
+    	switch(direction) {
+    	case "Up":
+			tilex = ghost.getTile_x();
+			tiley = ghost.getTile_y()-1;
+			break;
+		case "Down":
+			tilex = ghost.getTile_x();
+			tiley = ghost.getTile_y()+1;
+			break;
+
+		case "Right":
+			tilex = ghost.getTile_x()+1;
+			tiley = ghost.getTile_y();
+			break;
+
+		case "Left":
+			tilex = ghost.getTile_x()-1;
+			tiley = ghost.getTile_y();
+			break;
+		}
+    	
+    	String mazeKey = Integer.toString(tilex) + "-" + Integer.toString(tiley);
+   
+    	return !maze.containsKey(mazeKey) && !ghost.enemyDirection.equals(direction);
     }
-    
-    public boolean ghostCanMoveUp() {
-    	return !maze.containsKey(Integer.toString(ghost.getTile_x()) + "-" + (Integer.toString(ghost.getTile_y()-1)));
-    }
-    public boolean ghostCanMoveLeft() {
-    	return !maze.containsKey(Integer.toString(ghost.getTile_x()-1) + "-" + Integer.toString(ghost.getTile_y()));
-    }
-    public boolean ghostCanMoveDown() {
-    	return !maze.containsKey(Integer.toString(ghost.getTile_x()) + "-" + (Integer.toString(ghost.getTile_y()+1)));
-    }
-    public boolean ghostCanMoveRight() {
-    	int tilex = ghost.getTile_x()+1;
-    	int tiley = ghost.getTile_y();
-    	return !maze.containsKey(Integer.toString(tilex) + "-" + Integer.toString(tiley));
-    }
-    
+
     public void stopPlayerMovement() {
     	player.stopMoving();
     }
@@ -384,7 +338,6 @@ public class Board extends JPanel implements ActionListener{
 					Point p = new Point(j*20, i*20);
 					points.add(p);
 				}
-				
 				else if(levelData[i][j].equals("Enemy")) {
 					ghost = new Enemy(j*20, i*20);
 				}

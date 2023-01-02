@@ -6,22 +6,13 @@ import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 
 public class PlayerCharacter extends GameObject {
-	
-	// dx/dy = direction
-	
-	public int requested_dx=0;
-	public int requested_dy=0;
-	public int requestCounter = 0;
-	
+		
 	public int currentAnimationFrame;
 	private int animationDelay = 0;
 	
-	public boolean changingDirection = false;
-	
 	String iconFileLocation;
 	String iconFileName;
-	String playerDirection;
-	public String requestedDirection;
+	public String playerDirection;
 	
 	public PlayerCharacter(int starting_x_position, int starting_y_position) {
 		super(starting_x_position, starting_y_position);
@@ -91,15 +82,6 @@ public class PlayerCharacter extends GameObject {
 		iconFileName =  location + "Player_" + direction + Integer.toString(frameNumber) + ".png";
 	}
 	
-	private void requestDirectionChange(int requested_dx, int requested_dy, String requestedDirection) {
-		this.requested_dx = requested_dx;
-    	this.requested_dy = requested_dy;
-        this.requestedDirection = requestedDirection;
-
-    	requestCounter = 30;
-    	changingDirection = true;
-	}
-	
 	public void setPlayerDirection(String playerDirection) {
 		this.playerDirection = playerDirection;
 	}
@@ -109,19 +91,19 @@ public class PlayerCharacter extends GameObject {
         int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_A) {
-        	requestDirectionChange(-2, 0, "Left");
+        	this.requestDirectionChange("Left");
         }
 
         if (key == KeyEvent.VK_D) {
-        	requestDirectionChange(2, 0, "Right");
+        	this.requestDirectionChange("Right");
         }
 
         if (key == KeyEvent.VK_W) {
-        	requestDirectionChange(0, -2, "Up");
+        	this.requestDirectionChange("Up");
         }
 
         if (key == KeyEvent.VK_S) {
-        	requestDirectionChange(0, 2, "Down");
+        	this.requestDirectionChange("Down");
         }
     }
 }

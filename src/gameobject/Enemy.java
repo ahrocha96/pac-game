@@ -8,18 +8,11 @@ public class Enemy extends GameObject {
 
 	String iconFileLocation;
 	String iconFileName;
-	String currentDirection;
-	public String requestedDirection;
-	
-	public int requested_dx=0;
-	public int requested_dy=0;
-	public int requestCounter = 0;
-	
+	public String currentDirection;
+		
 	public int currentAnimationFrame;
 	private int animationDelay = 0;
-	
-	public boolean changingDirection = false;
-	
+		
 	public void requestDirectionChange(int requested_dx, int requested_dy, String requestedDirection) {
 		this.requested_dx = requested_dx;
     	this.requested_dy = requested_dy;
@@ -74,7 +67,7 @@ public class Enemy extends GameObject {
 		return hitbox = new Rectangle(x_pos, y_pos, width-6, height-3);
 	}
 	
-	String enemyDirection = "";
+	public String enemyDirection = "Right";
 	
 	public void setEnemyDirection(String enemyDirection) {
 		this.enemyDirection = enemyDirection;
