@@ -1,5 +1,6 @@
 package game;
 
+import gameobject.GameObject;
 import gameobject.Wall;
 
 public class CollisionDetector {
@@ -51,26 +52,17 @@ public class CollisionDetector {
 	}
 	
 	/*This is distinct from checkPlayerWallCollision to fulfill requested direction changes by the player. Don't use for movement in current direction*/
-	public boolean  checkFuturePlayerWallCollision(int x_directionToCheck, int y_directionToCheck) {
+	public boolean checkFutureGameObjectWallCollision(int x_directionToCheck, int y_directionToCheck, GameObject obj) {
 		boolean collision = false;
 		
 		for(Wall values : board.maze.values()) {
-			if (board.player.getFutureHitbox(x_directionToCheck, y_directionToCheck).intersects(values.getHitbox())) {
+			if (obj.getFutureHitbox(x_directionToCheck, y_directionToCheck).intersects(values.getHitbox())) {
 				collision = true;
 			}
 		}
 		return collision;
 	}
 	
-	public boolean  checkFutureEnemyWallCollision(int x_directionToCheck, int y_directionToCheck) {
-		boolean collision = false;
-		
-		for(Wall values : board.maze.values()) {
-			if (board.ghost.getFutureHitbox(x_directionToCheck, y_directionToCheck).intersects(values.getHitbox())) {
-				collision = true;
-			}
-		}
-		return collision;
-	}
+
 
 }
