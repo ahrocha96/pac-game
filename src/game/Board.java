@@ -88,7 +88,14 @@ public class Board extends JPanel implements ActionListener{
         
         renderBoard(g2d);
 		gameStats.renderScore(g2d, height);
-
+		 for (int i = 0; i < points.size(); i++) {
+	        	g2d.drawImage(points.get(i).getImage(), points.get(i).getX_position(), 
+	            		points.get(i).getY_position(), this);
+	        }
+		 for (Wall values : maze.values() ) {
+	        	g2d.drawImage(values.getImage(), values.getX_position(), 
+	            		values.getY_position(), this);
+		 } 
 
         g2d.drawImage(player.getImage(), player.getX_position(), 
             player.getY_position(), this);
@@ -96,14 +103,7 @@ public class Board extends JPanel implements ActionListener{
         g2d.drawImage(ghost.getImage(), ghost.getX_position(), 
         		ghost.getY_position(), this);
         
-        for (int i = 0; i < points.size(); i++) {
-        	g2d.drawImage(points.get(i).getImage(), points.get(i).getX_position(), 
-            		points.get(i).getY_position(), this);
-        }
-        for (Wall values : maze.values() ) {
-        	g2d.drawImage(values.getImage(), values.getX_position(), 
-            		values.getY_position(), this);
-        }        
+              
     }
 	
 	public void renderBoard(Graphics2D g2d) {	
