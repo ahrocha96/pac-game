@@ -9,11 +9,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import gameobject.Enemy;
 import gameobject.PlayerCharacter;
 import gameobject.Point;
 import gameobject.Wall;
@@ -34,8 +36,10 @@ public class Board extends JPanel implements ActionListener{
 	
     private Timer timer;
     PlayerCharacter player;
+    Enemy ghost;
     List<Point> points;
-    List<Wall> maze;
+    //List<Wall> maze;
+    HashMap<String, Wall> maze;
     Statistics  gameStats;
     
     private final int DELAY = 4;
@@ -62,7 +66,7 @@ public class Board extends JPanel implements ActionListener{
         
         tiles = new Tile[height/20][width/20];
         points = new ArrayList<Point>();
-        maze = new ArrayList<Wall>();
+        maze = new HashMap<String, Wall>();
         placeGameObjects();
 
         timer = new Timer(DELAY, this);
@@ -90,13 +94,16 @@ public class Board extends JPanel implements ActionListener{
         g2d.drawImage(player.getImage(), player.getX_position(), 
             player.getY_position(), this);
         
+        g2d.drawImage(ghost.getImage(), ghost.getX_position(), 
+        		ghost.getY_position(), this);
+        
         for (int i = 0; i < points.size(); i++) {
         	g2d.drawImage(points.get(i).getImage(), points.get(i).getX_position(), 
             		points.get(i).getY_position(), this);
         }
-        for (int i = 0; i < maze.size(); i++) {
-        	g2d.drawImage(maze.get(i).getImage(), maze.get(i).getX_position(), 
-            		maze.get(i).getY_position(), this);
+        for (Wall values : maze.values() ) {
+        	g2d.drawImage(values.getImage(), values.getX_position(), 
+            		values.getY_position(), this);
         }        
     }
 	
@@ -115,18 +122,24 @@ public class Board extends JPanel implements ActionListener{
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent ev) {
 		//always check collisions before moving the player
 		
 		updatePlayerTile();
+		updateGhostTile();
 		
 		checkCollisions();
 		
 		if(player.changingDirection) {
 			processPlayerDirectionChange();
 		}
+
+		if(ghost.changingDirection) {
+			processEnemyDirectionChange();
+		}
 		
 		movePlayer();
+		moveGhosts();
 		
 		repaint();
 	}
@@ -147,17 +160,176 @@ public class Board extends JPanel implements ActionListener{
     	}
 	}
 	
+	private void processEnemyDirectionChange() {
+	    boolean collisionInNewDirection = false;
+
+	    ghost.requestCounter--;
+		if(ghost.requestCounter <= 0) {
+			ghost.changingDirection = false;
+		}
+		collisionInNewDirection = cd.checkFutureEnemyWallCollision(ghost.requested_dx, ghost.requested_dy);
+    	if (collisionInNewDirection == false) {
+    		ghost.setX_direction(ghost.requested_dx);
+    		ghost.setY_direction(ghost.requested_dy);
+    		ghost.setEnemyDirection(ghost.requestedDirection); 
+    		ghost.changingDirection = false;
+    	}
+	}
+	
     private void movePlayer() {
         player.move();        
     }     
     
+    private void moveGhosts() {
+    	determineGhostPath();
+    	ghost.move();
+    }
+    
+    private void determineGhostPath() {
+    	int px = player.getTile_x();
+    	int py = player.getTile_y();
+    	
+    	int gx = ghost.getTile_x();
+    	int gy = ghost.getTile_y();
+    	
+    	boolean pUp, pDown, pRight, pLeft;
+    	pUp = pDown = pRight = pLeft = false;
+    	boolean direction;
+    	
+    	if(true) {
+    		if (px > gx && py < gy) {
+        		pRight = pUp = true;
+        		if(ghostCanMoveUp()) {
+        			ghost.requestDirectionChange(0, -2, "Up");
+        		}
+        		else if(ghostCanMoveRight()) {
+        			ghost.requestDirectionChange(2, 0, "Right");
+
+        		}
+        		else if(ghostCanMoveLeft()) {
+        			ghost.requestDirectionChange(-2, 0, "Left");
+        		}
+        		else if(ghostCanMoveDown()) {
+        			ghost.requestDirectionChange(0, 2, "Down");
+        		}
+        		
+        	}
+        	else if (px > gx && py > gy) {
+        		pRight = pDown = true;
+        		if(ghostCanMoveRight()) {
+        			ghost.requestDirectionChange(2, 0, "Right");
+
+        		}
+        		else if(ghostCanMoveDown()) {
+        			ghost.requestDirectionChange(0, 2, "Down");
+        		}
+        		else if(ghostCanMoveUp()) {
+        			ghost.requestDirectionChange(0, -2, "Up");
+        		}
+        		
+        		else if(ghostCanMoveLeft()) {
+        			ghost.requestDirectionChange(-2, 0, "Left");
+        		}
+        		
+        	}
+        	else if(px > gx && py == gy) {
+        		pRight = true;
+        		if(ghostCanMoveRight()) {
+        			ghost.requestDirectionChange(2, 0, "Right");
+
+        		}
+        		else if(ghostCanMoveDown()) {
+        			ghost.requestDirectionChange(0, 2, "Down");
+        		}
+        		else if(ghostCanMoveUp()) {
+        			ghost.requestDirectionChange(0, -2, "Up");
+        		}
+        		
+        		else if(ghostCanMoveLeft()) {
+        			ghost.requestDirectionChange(-2, 0, "Left");
+        		}
+        	}
+        	else if (px < gx && py < gy) {
+        		pLeft = pUp = true;
+        		if(ghostCanMoveLeft()) {
+        			ghost.requestDirectionChange(-2, 0, "Left");
+        		}
+        		
+        		else if(ghostCanMoveUp()) {
+        			ghost.requestDirectionChange(0, -2, "Up");
+        		}
+        		
+        		else if(ghostCanMoveDown()) {
+        			ghost.requestDirectionChange(0, 2, "Down");
+        		}
+        		
+        		
+        		else if(ghostCanMoveRight()) {
+        			ghost.requestDirectionChange(2, 0, "Right");
+
+        		}
+        	}
+        	else if (px < gx && py > gy) {
+        		pLeft = pDown = true;
+        		if(ghostCanMoveLeft()) {
+        			ghost.requestDirectionChange(-2, 0, "Left");
+        		}
+        		else if(ghostCanMoveDown()) {
+        			ghost.requestDirectionChange(0, 2, "Down");
+        		}
+        		
+        		else if(ghostCanMoveUp()) {
+        			ghost.requestDirectionChange(0, -2, "Up");
+        		}
+        		
+        		
+        		
+        		
+        		else if(ghostCanMoveRight()) {
+        			ghost.requestDirectionChange(2, 0, "Right");
+
+        		}
+        	}
+        	else if (px < gx && py == gy) {
+        		pLeft = true;
+        	}
+        	else if (px == gx && py > gy) {
+        		pUp = true;
+        	}
+        	else if (px == gx && py < gy) {
+        		pDown = true;
+        	}	
+    	}
+    	
+    	
+    }
+    
+    public boolean ghostCanMoveUp() {
+    	return !maze.containsKey(Integer.toString(ghost.getTile_x()) + "-" + (Integer.toString(ghost.getTile_y()-1)));
+    }
+    public boolean ghostCanMoveLeft() {
+    	return !maze.containsKey(Integer.toString(ghost.getTile_x()-1) + "-" + Integer.toString(ghost.getTile_y()));
+    }
+    public boolean ghostCanMoveDown() {
+    	return !maze.containsKey(Integer.toString(ghost.getTile_x()) + "-" + (Integer.toString(ghost.getTile_y()+1)));
+    }
+    public boolean ghostCanMoveRight() {
+    	int tilex = ghost.getTile_x()+1;
+    	int tiley = ghost.getTile_y();
+    	return !maze.containsKey(Integer.toString(tilex) + "-" + Integer.toString(tiley));
+    }
+    
     public void stopPlayerMovement() {
     	player.stopMoving();
+    }
+    public void stopEnemyMovement() {
+    	ghost.stopMoving();
     }
     
     private void checkCollisions() {
     	cd.checkBoardBounds();
     	cd.checkPlayerWallCollision();
+    	cd.checkEnemyWallCollision();
     	cd.checkPlayerPointCollision();	
     }
   
@@ -167,6 +339,17 @@ public class Board extends JPanel implements ActionListener{
         		if (player.getHitbox().intersects(tiles[i][j].getHitbox())) {
         			player.setTile_x(j);
         			player.setTile_y(i);
+        		}    		
+    		}
+    	}
+    }
+    
+    private void updateGhostTile() {
+    	for(int i = 0; i < tiles.length; i++) {
+    		for (int j = 0; j < tiles[i].length; j++) {
+        		if (ghost.getHitbox().intersects(tiles[i][j].getHitbox())) {
+        			ghost.setTile_x(j);
+        			ghost.setTile_y(i);
         		}    		
     		}
     	}
@@ -192,7 +375,7 @@ public class Board extends JPanel implements ActionListener{
 				//TODO: Explore best ways to store level data to read in and then convert to 2d array. Maybe JSON?
 				if(levelData[i][j].equals("Wall")) {
 					Wall w = new Wall(j*20, i*20);
-					maze.add(w);	
+					maze.put(Integer.toString(j) + "-" + Integer.toString(i), w);
 				}
 				else if (levelData[i][j].equals("Player")){
 					player = new PlayerCharacter(j*20, i*20);
@@ -200,6 +383,10 @@ public class Board extends JPanel implements ActionListener{
 				else if(levelData[i][j].equals("Point")) {
 					Point p = new Point(j*20, i*20);
 					points.add(p);
+				}
+				
+				else if(levelData[i][j].equals("Enemy")) {
+					ghost = new Enemy(j*20, i*20);
 				}
 							
 			}
@@ -235,7 +422,7 @@ public class Board extends JPanel implements ActionListener{
 			{"Wall", "Point", "Point", "Point", "Point", "Point", "Point", "Wall", "Wall", "Point", "Point", "Point", "Point", "Wall", "Wall", "Point", "Point", "Point", "Point", "Wall", "Wall", "Point", "Point", "Point", "Point", "Point", "Point", "Wall"},
 			{"Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall"},
 			{"Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall"},
-			{"Wall", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall"},
+			{"Wall", "Enemy", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall"},
 			{"Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall"}
 		};
 }
