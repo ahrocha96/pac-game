@@ -13,21 +13,12 @@ public class Enemy extends GameObject {
 	public int currentAnimationFrame;
 	private int animationDelay = 0;
 		
-	public void requestDirectionChange(int requested_dx, int requested_dy, String requestedDirection) {
-		this.requested_dx = requested_dx;
-    	this.requested_dy = requested_dy;
-        this.requestedDirection = requestedDirection;
-
-    	requestCounter = 30;
-    	changingDirection = true;
-	}
-	
-	
 	public Enemy(int starting_x_position, int starting_y_position) {
 		super(starting_x_position, starting_y_position);
 		icon = new ImageIcon("C:\\Users\\ahroc\\Desktop\\GameAssets\\Player\\Player_Left0.png");
 		iconFileLocation = "C:\\Users\\ahroc\\Desktop\\GameAssets\\Player\\";
 		currentDirection = "Player_Right";
+		objectDirection = "Right";
 		name = "Enemy";
 		currentAnimationFrame = 0;
 		
@@ -36,9 +27,7 @@ public class Enemy extends GameObject {
 
 	}
 	
-	public Rectangle getFutureHitbox(int requested_x_direction, int requested_y_direction) {
-	    return new Rectangle(x_position+requested_x_direction, y_position + requested_y_direction, width, height);
-	}
+	
 	
 	public void move() {	
 		
@@ -58,19 +47,10 @@ public class Enemy extends GameObject {
 		updateAnimation();
 	}
 	
-	public boolean moving() {
-		return x_direction != 0 || y_direction != 0;
-	}
 	
 	@Override
 	public Rectangle updateHitbox(int x_pos, int y_pos) {
 		return hitbox = new Rectangle(x_pos, y_pos, width-6, height-3);
-	}
-	
-	public String enemyDirection = "Right";
-	
-	public void setEnemyDirection(String enemyDirection) {
-		this.enemyDirection = enemyDirection;
 	}
 	
 	private  void updateAnimation(){

@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import gameobject.Enemy;
+import gameobject.GameObject;
 import gameobject.PlayerCharacter;
 import gameobject.Point;
 import gameobject.Wall;
@@ -124,17 +125,17 @@ public class Board extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent ev) {
 		//always check collisions before moving the player
 		
-		updatePlayerTile();
-		updateGhostTile();
+		updateGameObjectTile(player);
+		updateGameObjectTile(ghost);
 		
 		checkCollisions();
 		
 		if(player.changingDirection) {
-			processPlayerDirectionChange();
+			processGameObjectDirectionChange(player);
 		}
 
 		if(ghost.changingDirection) {
-			processEnemyDirectionChange();
+			processGameObjectDirectionChange(ghost);
 		}
 		
 		movePlayer();
@@ -143,37 +144,24 @@ public class Board extends JPanel implements ActionListener{
 		repaint();
 	}
 	
-	private void processPlayerDirectionChange() {
-	    boolean collisionInNewDirection = false;
+	private void processGameObjectDirectionChange(GameObject obj){
+		 boolean collisionInNewDirection = false;
 
-		player.requestCounter--;
-		if(player.requestCounter <= 0) {
-			player.changingDirection = false;
-		}
-		collisionInNewDirection = cd.checkFuturePlayerWallCollision(player.requested_dx, player.requested_dy);
-    	if (collisionInNewDirection == false) {
-    		player.setX_direction(player.requested_dx);
-			player.setY_direction(player.requested_dy);
-			player.setPlayerDirection(player.requestedDirection); 
-			player.changingDirection = false;
-    	}
+		 obj.requestCounter--;
+			if(obj.requestCounter <= 0) {
+				obj.changingDirection = false;
+			}
+			collisionInNewDirection = cd.checkFuturePlayerWallCollision(obj.requested_dx, obj.requested_dy);
+	    	if (collisionInNewDirection == false) {
+	    		obj.setX_direction(obj.requested_dx);
+	    		obj.setY_direction(obj.requested_dy);
+				obj.setObjectDirection(obj.requestedDirection); 
+				obj.changingDirection = false;
+	    	}
 	}
 	
-	private void processEnemyDirectionChange() {
-	    boolean collisionInNewDirection = false;
 
-	    ghost.requestCounter--;
-		if(ghost.requestCounter <= 0) {
-			ghost.changingDirection = false;
-		}
-		collisionInNewDirection = cd.checkFutureEnemyWallCollision(ghost.requested_dx, ghost.requested_dy);
-    	if (collisionInNewDirection == false) {
-    		ghost.setX_direction(ghost.requested_dx);
-    		ghost.setY_direction(ghost.requested_dy);
-    		ghost.setEnemyDirection(ghost.requestedDirection); 
-    		ghost.changingDirection = false;
-    	}
-	}
+
 	
     private void movePlayer() {
         player.move();        
@@ -191,8 +179,6 @@ public class Board extends JPanel implements ActionListener{
     	int gx = ghost.getTile_x();
     	int gy = ghost.getTile_y();
     	
-    	boolean pUp, pDown, pRight, pLeft;
-    	pUp = pDown = pRight = pLeft = false;
     	if(!ghost.moving()) {
     		if(px > gx && py < gy) {
     			checkGhostDirectionOrder("Up", "Right", "Down", "Left");
@@ -244,7 +230,7 @@ public class Board extends JPanel implements ActionListener{
     }
     
     public boolean ghostCanMoveDirection(String direction) {
-    	int tilex = 0;;
+    	int tilex = 0;
     	int tiley = 0;
     	
     	switch(direction) {
@@ -270,14 +256,11 @@ public class Board extends JPanel implements ActionListener{
     	
     	String mazeKey = Integer.toString(tilex) + "-" + Integer.toString(tiley);
    
-    	return !maze.containsKey(mazeKey) && !ghost.enemyDirection.equals(direction);
+    	return !maze.containsKey(mazeKey) && !ghost.objectDirection.equals(direction);
     }
-
-    public void stopPlayerMovement() {
-    	player.stopMoving();
-    }
-    public void stopEnemyMovement() {
-    	ghost.stopMoving();
+    
+    public void stopGameObjectMovement(GameObject obj) {
+    	obj.stopMoving();
     }
     
     private void checkCollisions() {
@@ -286,28 +269,18 @@ public class Board extends JPanel implements ActionListener{
     	cd.checkEnemyWallCollision();
     	cd.checkPlayerPointCollision();	
     }
-  
-    private void updatePlayerTile() {
-    	for(int i = 0; i < tiles.length; i++) {
-    		for (int j = 0; j < tiles[i].length; j++) {
-        		if (player.getHitbox().intersects(tiles[i][j].getHitbox())) {
-        			player.setTile_x(j);
-        			player.setTile_y(i);
-        		}    		
-    		}
-    	}
-    }
     
-    private void updateGhostTile() {
+    private void updateGameObjectTile(GameObject obj){
     	for(int i = 0; i < tiles.length; i++) {
     		for (int j = 0; j < tiles[i].length; j++) {
-        		if (ghost.getHitbox().intersects(tiles[i][j].getHitbox())) {
-        			ghost.setTile_x(j);
-        			ghost.setTile_y(i);
+        		if (obj.getHitbox().intersects(tiles[i][j].getHitbox())) {
+        			obj.setTile_x(j);
+        			obj.setTile_y(i);
         		}    		
     		}
     	}
     }
+  
     
     class GameKeyAdapter extends KeyAdapter {
 

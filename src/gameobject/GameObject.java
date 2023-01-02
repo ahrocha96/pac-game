@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 
 import javax.swing.ImageIcon;
 
-public class GameObject {
+public abstract class GameObject {
 
 	protected String name;
 
@@ -18,6 +18,7 @@ public class GameObject {
 	public int requestCounter = 0;
 	public boolean changingDirection = false;
 	public String requestedDirection = "";
+	public String objectDirection;
 
 	protected int tile_x;
 	protected int tile_y;
@@ -116,6 +117,23 @@ public class GameObject {
 		return hitbox = new Rectangle(x, y, width, height);
 	}
 
+	public abstract void stopMoving();
+	
+	public boolean moving() {
+		return x_direction != 0 || y_direction != 0;
+	}
+	
+	public void setObjectDirection(String objectDirection) {
+		this.objectDirection = objectDirection;
+	}
+	
+	//returns the hit box of the player after the next desired move. 
+	//This is used to predict collisions and allow the caller to behave accordingly 
+
+	public Rectangle getFutureHitbox(int requested_x_direction, int requested_y_direction) {
+	    return new Rectangle(x_position+requested_x_direction, y_position + requested_y_direction, width, height);
+	}
+	
 	public void requestDirectionChange(String requestedDirection) {
 
 		int requested_dx = 0;

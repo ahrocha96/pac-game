@@ -12,13 +12,12 @@ public class PlayerCharacter extends GameObject {
 	
 	String iconFileLocation;
 	String iconFileName;
-	public String playerDirection;
 	
 	public PlayerCharacter(int starting_x_position, int starting_y_position) {
 		super(starting_x_position, starting_y_position);
 		icon = new ImageIcon("C:\\Users\\ahroc\\Desktop\\GameAssets\\Player\\Player_Right0.png");
 		iconFileLocation = "C:\\Users\\ahroc\\Desktop\\GameAssets\\Player\\";
-		playerDirection = "Player_Right";
+		objectDirection = "Player_Right";
 		name = "Player";
 		currentAnimationFrame = 0;
 		
@@ -37,10 +36,6 @@ public class PlayerCharacter extends GameObject {
 			updateAnimation();
 		}	     
     }
-	
-	private boolean moving() {
-		return x_direction != 0 || y_direction != 0;
-	}
 	
 	public void stopMoving() {
 		setX_direction(0);
@@ -62,16 +57,12 @@ public class PlayerCharacter extends GameObject {
 			 animationDelay= 0;
 		 }
         
-        updateIconFile(iconFileLocation, playerDirection, currentAnimationFrame);
+        updateIconFile(iconFileLocation, objectDirection, currentAnimationFrame);
         icon = new ImageIcon(iconFileName);
         loadImage();
 	}
 		
-	//returns the hit box of the player after the next desired move. 
-	//This is used to predict collisions and allow the caller to behave accordingly 
-	public Rectangle getFutureHitbox(int requested_x_direction, int requested_y_direction) {
-	    return new Rectangle(x_position+requested_x_direction, y_position + requested_y_direction, width, height);
-	}
+
 	
 	@Override
 	public Rectangle updateHitbox(int x_pos, int y_pos) {
@@ -82,10 +73,7 @@ public class PlayerCharacter extends GameObject {
 		iconFileName =  location + "Player_" + direction + Integer.toString(frameNumber) + ".png";
 	}
 	
-	public void setPlayerDirection(String playerDirection) {
-		this.playerDirection = playerDirection;
-	}
-	
+
 	public void keyPressed(KeyEvent e) {
 
         int key = e.getKeyCode();

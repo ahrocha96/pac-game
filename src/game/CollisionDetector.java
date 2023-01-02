@@ -37,7 +37,7 @@ public class CollisionDetector {
 	public void checkPlayerWallCollision() {
 		for(Wall values : board.maze.values()) {
 			if (board.player.getFutureHitbox(board.player.getX_Direction(), board.player.getY_Direction()).intersects(values.getHitbox())) {
-				board.stopPlayerMovement();
+				board.stopGameObjectMovement(board.player);
 			}
 		}
 	}
@@ -45,7 +45,7 @@ public class CollisionDetector {
 	public void checkEnemyWallCollision() {
 		for(Wall values : board.maze.values()) {
 			if (board.ghost.getFutureHitbox(board.ghost.getX_Direction(), board.ghost.getY_Direction()).intersects(values.getHitbox())) {
-				board.stopEnemyMovement();
+				board.stopGameObjectMovement(board.ghost);
 			}
 		}
 	}
