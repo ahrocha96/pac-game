@@ -17,7 +17,7 @@ public class PlayerCharacter extends GameObject {
 		super(starting_x_position, starting_y_position);
 		icon = new ImageIcon("C:\\Users\\ahroc\\Desktop\\GameAssets\\Player\\Player_Right0.png");
 		iconFileLocation = "C:\\Users\\ahroc\\Desktop\\GameAssets\\Player\\";
-		objectDirection = "Player_Right";
+		objectDirection = "Right";
 		name = "Player";
 		currentAnimationFrame = 0;
 		
@@ -26,7 +26,6 @@ public class PlayerCharacter extends GameObject {
 	}
 	
 	public void move() {	
-		
 		x_position += x_direction;
 		y_position += y_direction;
 

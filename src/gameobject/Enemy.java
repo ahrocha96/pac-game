@@ -28,8 +28,6 @@ public class Enemy extends GameObject {
 
 	}
 	
-	
-	
 	public void move() {	
 		
 		x_position += x_direction;

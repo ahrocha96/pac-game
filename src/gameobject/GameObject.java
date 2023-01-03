@@ -13,12 +13,14 @@ public abstract class GameObject {
 	protected int y_position;
 	protected int x_direction;
 	protected int y_direction;
+	
 	public int requested_dx = 0;
-	public int requested_dy = 0;
+	public int requested_dy = 0;	
 	public int requestCounter = 0;
+	
 	public boolean changingDirection = false;
 	public String requestedDirection = "";
-	public String objectDirection;
+	public String objectDirection = "";
 
 	protected int tile_x;
 	protected int tile_y;
@@ -118,6 +120,7 @@ public abstract class GameObject {
 	}
 
 	public abstract void stopMoving();
+	public abstract void move();
 	
 	public boolean moving() {
 		return x_direction != 0 || y_direction != 0;

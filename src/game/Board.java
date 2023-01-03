@@ -149,8 +149,9 @@ public class Board extends JPanel implements ActionListener{
 			processGameObjectDirectionChange(ghost);
 		}
 		
-		movePlayer();
-		moveGhosts();
+		moveGameObject(player);
+    	determineGhostPath();
+		moveGameObject(ghost);
 		
 		repaint();
 	}
@@ -171,13 +172,8 @@ public class Board extends JPanel implements ActionListener{
 	    	}
 	}
 	
-    private void movePlayer() {
-        player.move();        
-    }     
-    
-    private void moveGhosts() {
-    	determineGhostPath();
-    	ghost.move();
+    private void moveGameObject(GameObject obj) {
+    	obj.move();
     }
     
     private void determineGhostPath() {
