@@ -126,7 +126,18 @@ public class Board extends JPanel implements ActionListener{
 		//always check collisions before moving the player
 		
 		updateGameObjectTile(player);
+		
+		int gx = ghost.getTile_x();
+		int gy = ghost.getTile_y();
+		
 		updateGameObjectTile(ghost);
+		
+		int gx2 = ghost.getTile_x();
+		int gy2 = ghost.getTile_y();
+		
+		if(gx != gx2 || gy != gy2) {
+			ghost.canChangeDirection = true;
+		}
 		
 		checkCollisions();
 		
@@ -160,9 +171,6 @@ public class Board extends JPanel implements ActionListener{
 	    	}
 	}
 	
-
-
-	
     private void movePlayer() {
         player.move();        
     }     
@@ -178,8 +186,9 @@ public class Board extends JPanel implements ActionListener{
     	
     	int gx = ghost.getTile_x();
     	int gy = ghost.getTile_y();
-    	
-    	if(!ghost.moving()) {
+    	    	
+    	if(ghost.canChangeDirection || !ghost.moving()) {
+    	    
     		if(px > gx && py < gy) {
     			checkGhostDirectionOrder("Up", "Right", "Down", "Left");
         	}
@@ -197,18 +206,15 @@ public class Board extends JPanel implements ActionListener{
     		}
         	else if(px > gx && py > gy) {
     			checkGhostDirectionOrder("Down", "Right", "Up", "Left");
-    	
     		}
         	else if(px == gx && py < gy) {
     			checkGhostDirectionOrder("Up", "Right", "Down", "Left");
-    	
     		}
         	else if(px == gx && py > gy) {
     			checkGhostDirectionOrder("Down", "Left", "Up", "Right");
-
     		}	
+    		ghost.canChangeDirection = false;
     	}
-    	
     }
     
     public void checkGhostDirectionOrder(String one, String two, String three, String four) {
@@ -232,31 +238,36 @@ public class Board extends JPanel implements ActionListener{
     public boolean ghostCanMoveDirection(String direction) {
     	int tilex = 0;
     	int tiley = 0;
+    	String opposite = "";
     	
     	switch(direction) {
     	case "Up":
 			tilex = ghost.getTile_x();
 			tiley = ghost.getTile_y()-1;
+			opposite = "Down";
 			break;
 		case "Down":
 			tilex = ghost.getTile_x();
 			tiley = ghost.getTile_y()+1;
+			opposite = "Up";
 			break;
 
 		case "Right":
 			tilex = ghost.getTile_x()+1;
 			tiley = ghost.getTile_y();
+			opposite = "Left";
 			break;
 
 		case "Left":
 			tilex = ghost.getTile_x()-1;
 			tiley = ghost.getTile_y();
+			opposite = "Right";
 			break;
 		}
     	
     	String mazeKey = Integer.toString(tilex) + "-" + Integer.toString(tiley);
    
-    	return !maze.containsKey(mazeKey) && !ghost.objectDirection.equals(direction);
+    	return !maze.containsKey(mazeKey) && !ghost.objectDirection.equals(opposite);
     }
     
     public void stopGameObjectMovement(GameObject obj) {
@@ -265,8 +276,8 @@ public class Board extends JPanel implements ActionListener{
     
     private void checkCollisions() {
     	cd.checkBoardBounds();
-    	cd.checkPlayerWallCollision();
-    	cd.checkEnemyWallCollision();
+    	cd.checkGameObjectWallCollision(player);
+    	cd.checkGameObjectWallCollision(ghost);
     	cd.checkPlayerPointCollision();	
     }
     
@@ -286,7 +297,7 @@ public class Board extends JPanel implements ActionListener{
 
         @Override
         public void keyPressed(KeyEvent e) {
-            player.keyPressed(e);
+            player.keyPressed(e); 
         }
     }
 	

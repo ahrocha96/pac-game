@@ -9,6 +9,7 @@ public class Enemy extends GameObject {
 	String iconFileLocation;
 	String iconFileName;
 	public String currentDirection;
+	public boolean canChangeDirection = false;
 		
 	public int currentAnimationFrame;
 	private int animationDelay = 0;

@@ -35,21 +35,14 @@ public class CollisionDetector {
 		}
 	}
 	    
-	public void checkPlayerWallCollision() {
+	public void checkGameObjectWallCollision(GameObject obj) {
 		for(Wall values : board.maze.values()) {
-			if (board.player.getFutureHitbox(board.player.getX_Direction(), board.player.getY_Direction()).intersects(values.getHitbox())) {
-				board.stopGameObjectMovement(board.player);
+			if (obj.getFutureHitbox(obj.getX_Direction(), obj.getY_Direction()).intersects(values.getHitbox())) {
+				board.stopGameObjectMovement(obj);
 			}
-		}
+		}	
 	}
 	
-	public void checkEnemyWallCollision() {
-		for(Wall values : board.maze.values()) {
-			if (board.ghost.getFutureHitbox(board.ghost.getX_Direction(), board.ghost.getY_Direction()).intersects(values.getHitbox())) {
-				board.stopGameObjectMovement(board.ghost);
-			}
-		}
-	}
 	
 	/*This is distinct from checkPlayerWallCollision to fulfill requested direction changes by the player. Don't use for movement in current direction*/
 	public boolean checkFutureGameObjectWallCollision(int x_directionToCheck, int y_directionToCheck, GameObject obj) {
