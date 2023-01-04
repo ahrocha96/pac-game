@@ -4,7 +4,7 @@ import java.awt.Rectangle;
 
 import javax.swing.ImageIcon;
 
-public class Enemy extends GameObject {
+public class Enemy extends GameCharacter {
 
 	String iconFileLocation;
 	String iconFileName;

@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import gameobject.Enemy;
+import gameobject.GameCharacter;
 import gameobject.GameObject;
 import gameobject.PlayerCharacter;
 import gameobject.Point;
@@ -123,7 +124,6 @@ public class Board extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent ev) {
-		//always check collisions before moving the player
 		
 		updateGameObjectTile(player);
 		
@@ -139,6 +139,7 @@ public class Board extends JPanel implements ActionListener{
 			ghost.canChangeDirection = true;
 		}
 		
+		//always check collisions BEFORE moving the player
 		checkCollisions();
 		
 		if(player.changingDirection) {
@@ -172,7 +173,7 @@ public class Board extends JPanel implements ActionListener{
 	    	}
 	}
 	
-    private void moveGameObject(GameObject obj) {
+    private void moveGameObject(GameCharacter obj) {
     	obj.move();
     }
     
@@ -198,10 +199,10 @@ public class Board extends JPanel implements ActionListener{
     			checkGhostDirectionOrder("Left", "Down", "Right", "Up");
     		}
         	else if(px < gx && py > gy) {
-    			checkGhostDirectionOrder("Down", "Left", "Up", "Right");
+    			checkGhostDirectionOrder("Down", "Left", "Right", "Up");
     		}
         	else if(px > gx && py > gy) {
-    			checkGhostDirectionOrder("Down", "Right", "Up", "Left");
+    			checkGhostDirectionOrder("Down", "Right", "Left", "Up");
     		}
         	else if(px == gx && py < gy) {
     			checkGhostDirectionOrder("Up", "Right", "Down", "Left");
@@ -266,7 +267,7 @@ public class Board extends JPanel implements ActionListener{
     	return !maze.containsKey(mazeKey) && !ghost.objectDirection.equals(opposite);
     }
     
-    public void stopGameObjectMovement(GameObject obj) {
+    public void stopGameObjectMovement(GameCharacter obj) {
     	obj.stopMoving();
     }
     
@@ -307,18 +308,18 @@ public class Board extends JPanel implements ActionListener{
 				tiles[i][j] = new Tile(j, i);
 				
 				//TODO: Explore best ways to store level data to read in and then convert to 2d array. Maybe JSON?
-				if(levelData[i][j].equals("Wall")) {
+				if(levelData[i][j] == 'w') {
 					Wall w = new Wall(j*20, i*20);
 					maze.put(Integer.toString(j) + "-" + Integer.toString(i), w);
 				}
-				else if (levelData[i][j].equals("Player")){
+				else if (levelData[i][j] == 'c'){
 					player = new PlayerCharacter(j*20, i*20);
 				}
-				else if(levelData[i][j].equals("Point")) {
+				else if(levelData[i][j] == 'p') {
 					Point p = new Point(j*20, i*20);
 					points.add(p);
 				}
-				else if(levelData[i][j].equals("Enemy")) {
+				else if(levelData[i][j] == 'g') {
 					ghost = new Enemy(j*20, i*20);
 				}
 							
@@ -326,36 +327,34 @@ public class Board extends JPanel implements ActionListener{
 		}
 	}
 	
-	private String[][] levelData = {
-			{"Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall"}, 
-			{"Wall", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall", "Wall", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall"},
-			{"Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Point", "Wall"},
-			{"Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Point", "Wall"},
-			{"Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Point", "Wall"},
-			{"Wall", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall"},
-			{"Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Point", "Wall"},
-			{"Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Point", "Wall"},
-			{"Wall", "Point", "Point", "Point", "Point", "Point", "Point", "Wall", "Wall", "Point", "Point", "Point", "Point", "Wall", "Wall", "Point", "Point", "Point", "Point", "Wall", "Wall", "Point", "Point", "Point", "Point", "Point", "Point", "Wall"},
-			{"Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall"},
-			{"Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall"},
-			{"Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall"},
-			{"Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "empty", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "empty", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall"},
-			{"Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "empty", "Wall", "empty", "empty", "empty", "empty", "empty", "empty", "Wall", "empty", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall"},
-			{"empty", "empty", "empty", "empty", "empty", "empty", "Point", "empty", "empty", "empty", "Wall", "empty", "empty", "empty", "empty", "empty", "empty", "Wall", "empty", "empty", "empty", "Point", "empty", "empty", "empty", "empty", "empty", "empty"},
-			{"Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "empty", "Wall", "empty", "empty", "empty", "empty", "empty", "empty", "Wall", "empty", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall"},
-			{"Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "empty", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "empty", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall"},
-			{"Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall"},
-			{"Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "empty", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "empty", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall"},
-			{"Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "empty", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "empty", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall"},
-			{"Wall", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall", "Wall", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall"},
-			{"Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Point", "Wall"},
-			{"Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Point", "Wall"},
-			{"Wall", "Point", "Point", "Point", "Wall", "Wall", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Player", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall", "Wall", "Point", "Point", "Point", "Wall"},
-			{"Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall"},
-			{"Wall", "Point", "Point", "Point", "Point", "Point", "Point", "Wall", "Wall", "Point", "Point", "Point", "Point", "Wall", "Wall", "Point", "Point", "Point", "Point", "Wall", "Wall", "Point", "Point", "Point", "Point", "Point", "Point", "Wall"},
-			{"Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall"},
-			{"Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall", "Wall", "Point", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Point", "Wall"},
-			{"Wall", "Enemy", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Point", "Wall"},
-			{"Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall","Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall", "Wall"}
-		};
+	private char[][] levelData = {{'w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w'},
+			{'w','p','p','p','p','p','p','p','p','p','p','p','p','w','w','p','p','p','p','p','p','p','p','p','p','p','p','w'},
+			{'w','p','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','p','w'},
+			{'w','p','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','p','w'},
+			{'w','p','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','p','w'},
+			{'w','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','w'},
+			{'w','p','w','w','w','w','p','w','w','p','w','w','w','w','w','w','w','w','p','w','w','p','w','w','w','w','p','w'},
+			{'w','p','w','w','w','w','p','w','w','p','w','w','w','w','w','w','w','w','p','w','w','p','w','w','w','w','p','w'},
+			{'w','p','p','p','p','p','p','w','w','p','p','p','p','w','w','p','p','p','p','w','w','p','p','p','p','p','p','w'},
+			{'w','w','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','w','w'},
+			{'w','w','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','w','w'},
+			{'w','w','w','w','w','w','p','w','w','e','e','e','e','e','e','e','e','e','e','w','w','p','w','w','w','w','w','w'},
+			{'w','w','w','w','w','w','p','w','w','e','w','w','w','w','w','w','w','w','e','w','w','p','w','w','w','w','w','w'},
+			{'w','w','w','w','w','w','p','w','w','e','w','e','e','e','e','e','e','w','e','w','w','p','w','w','w','w','w','w'},
+			{'e','e','e','e','e','e','p','e','e','e','w','e','e','e','e','e','e','w','e','e','e','p','e','e','e','e','e','e'},
+			{'w','w','w','w','w','w','p','w','w','e','w','e','e','e','e','e','e','w','e','w','w','p','w','w','w','w','w','w'},
+			{'w','w','w','w','w','w','p','w','w','e','w','w','w','w','w','w','w','w','e','w','w','p','w','w','w','w','w','w'},
+			{'w','w','w','w','w','w','p','w','w','e','e','e','e','e','e','e','e','e','e','w','w','p','w','w','w','w','w','w'},
+			{'w','w','w','w','w','w','p','w','w','e','w','w','w','w','w','w','w','w','e','w','w','p','w','w','w','w','w','w'},
+			{'w','w','w','w','w','w','p','w','w','e','w','w','w','w','w','w','w','w','e','w','w','p','w','w','w','w','w','w'},
+			{'w','p','p','p','p','p','p','p','p','p','p','p','p','w','w','p','p','p','p','p','p','p','p','p','p','p','p','w'},
+			{'w','p','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','p','w'},
+			{'w','p','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','p','w'},
+			{'w','p','p','p','w','w','p','p','p','p','p','p','p','p','c','p','p','p','p','p','p','p','w','w','p','p','p','w'},
+			{'w','w','w','p','w','w','p','w','w','p','w','w','w','w','w','w','w','w','p','w','w','p','w','w','p','w','w','w'},
+			{'w','p','p','p','p','p','p','w','w','p','p','p','p','w','w','p','p','p','p','w','w','p','p','p','p','p','p','w'},
+			{'w','p','w','w','w','w','w','w','w','w','w','w','p','w','w','p','w','w','w','w','w','w','w','w','w','w','p','w'},
+			{'w','p','w','w','w','w','w','w','w','w','w','w','p','w','w','p','w','w','w','w','w','w','w','w','w','w','p','w'},
+			{'w','g','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','w'},
+			{'w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w'}};
 }

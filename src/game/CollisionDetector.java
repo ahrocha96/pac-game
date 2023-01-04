@@ -1,5 +1,6 @@
 package game;
 
+import gameobject.GameCharacter;
 import gameobject.GameObject;
 import gameobject.Wall;
 
@@ -35,7 +36,7 @@ public class CollisionDetector {
 		}
 	}
 	    
-	public void checkGameObjectWallCollision(GameObject obj) {
+	public void checkGameObjectWallCollision(GameCharacter obj) {
 		for(Wall values : board.maze.values()) {
 			if (obj.getFutureHitbox(obj.getX_Direction(), obj.getY_Direction()).intersects(values.getHitbox())) {
 				board.stopGameObjectMovement(obj);
@@ -44,7 +45,7 @@ public class CollisionDetector {
 	}
 	
 	
-	/*This is distinct from checkPlayerWallCollision to fulfill requested direction changes by the player. Don't use for movement in current direction*/
+	/*This is distinct from checkGameObjectWallCollision to fulfill requested direction changes by the player. Don't use for movement in current direction*/
 	public boolean checkFutureGameObjectWallCollision(int x_directionToCheck, int y_directionToCheck, GameObject obj) {
 		boolean collision = false;
 		
@@ -55,7 +56,4 @@ public class CollisionDetector {
 		}
 		return collision;
 	}
-	
-
-
 }

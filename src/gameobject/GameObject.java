@@ -118,57 +118,18 @@ public abstract class GameObject {
 	public Rectangle updateHitbox(int x, int y) {
 		return hitbox = new Rectangle(x, y, width, height);
 	}
-
-	public abstract void stopMoving();
-	public abstract void move();
-	
-	public boolean moving() {
-		return x_direction != 0 || y_direction != 0;
-	}
 	
 	public void setObjectDirection(String objectDirection) {
 		this.objectDirection = objectDirection;
 	}
-	
+
+
 	//returns the hit box of the player after the next desired move. 
 	//This is used to predict collisions and allow the caller to behave accordingly 
-
 	public Rectangle getFutureHitbox(int requested_x_direction, int requested_y_direction) {
 	    return new Rectangle(x_position+requested_x_direction, y_position + requested_y_direction, width, height);
 	}
 	
-	public void requestDirectionChange(String requestedDirection) {
 
-		int requested_dx = 0;
-		int requested_dy = 0;
-
-		switch (requestedDirection) {
-		case "Up":
-			requested_dx = 0;
-			requested_dy = -2;
-			break;
-		case "Down":
-			requested_dx = 0;
-			requested_dy = 2;
-			break;
-
-		case "Right":
-			requested_dx = 2;
-			requested_dy = 0;
-			break;
-
-		case "Left":
-			requested_dx = -2;
-			requested_dy = 0;
-			break;
-		}
-
-		this.requested_dx = requested_dx;
-		this.requested_dy = requested_dy;
-		this.requestedDirection = requestedDirection;
-
-		requestCounter = 30;
-		changingDirection = true;
-	}
 
 }

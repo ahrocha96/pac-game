@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 
-public class PlayerCharacter extends GameObject {
+public class PlayerCharacter extends GameCharacter {
 		
 	public int currentAnimationFrame;
 	private int animationDelay = 0;
