@@ -6,13 +6,18 @@ import gameobject.Wall;
 
 public class CollisionDetector {
 	
-	Board board;
+	private static Board board;
 	
-	public CollisionDetector(Board b) {
-		board = b;
-	}
+	public static void checkCollisions(Board b) {
+    	board = b;
+		
+		checkBoardBounds();
+    	checkGameObjectWallCollision(board.player);
+    	checkGameObjectWallCollision(board.ghost);
+    	checkPlayerPointCollision();	
+    }
 	
-    public void checkBoardBounds() {
+    public static void checkBoardBounds() {
     	if (board.player.getX_position() > 540) {
     		board.player.setX_position(0);
     	}
@@ -27,7 +32,7 @@ public class CollisionDetector {
     	}
     }
 	
-	public void checkPlayerPointCollision() {
+	public static void checkPlayerPointCollision() {
 		for(int i = 0; i < board.points.size(); i++) {
 			if (board.player.getHitbox().intersects(board.points.get(i).getHitbox())) {
 				board.points.remove(i);
@@ -36,17 +41,16 @@ public class CollisionDetector {
 		}
 	}
 	    
-	public void checkGameObjectWallCollision(GameCharacter obj) {
+	public static void checkGameObjectWallCollision(GameCharacter obj) {
 		for(Wall values : board.maze.values()) {
 			if (obj.getFutureHitbox(obj.getX_Direction(), obj.getY_Direction()).intersects(values.getHitbox())) {
-				board.stopGameObjectMovement(obj);
+				obj.stopMoving();
 			}
 		}	
 	}
 	
-	
 	/*This is distinct from checkGameObjectWallCollision to fulfill requested direction changes by the player. Don't use for movement in current direction*/
-	public boolean checkFutureGameObjectWallCollision(int x_directionToCheck, int y_directionToCheck, GameObject obj) {
+	public static boolean checkFutureGameObjectWallCollision(int x_directionToCheck, int y_directionToCheck, GameObject obj) {
 		boolean collision = false;
 		
 		for(Wall values : board.maze.values()) {
