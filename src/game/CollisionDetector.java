@@ -14,6 +14,7 @@ public class CollisionDetector {
 		checkBoardBounds();
     	checkGameObjectWallCollision(board.player);
     	checkGameObjectWallCollision(board.ghost);
+    	checkPlayerGhostCollision();
     	checkPlayerPointCollision();	
     }
 	
@@ -38,6 +39,15 @@ public class CollisionDetector {
 				board.points.remove(i);
 				board.gameStats.score++;
 			}
+		}
+	}
+	
+	public static void checkPlayerGhostCollision() {
+		if(board.player.getHitbox().intersects(board.ghost.getHitbox())) {
+			board.player.stopMoving();
+			board.ghost.stopMoving();
+			
+			board.timer.stop();
 		}
 	}
 	    

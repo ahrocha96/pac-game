@@ -26,7 +26,7 @@ public class Board extends JPanel implements ActionListener{
 	public int height;
 	public int width;
 	
-    private Timer timer;
+    Timer timer;
     PlayerCharacter player;
     Enemy ghost;
     List<Point> points;

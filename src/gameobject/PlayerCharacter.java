@@ -42,7 +42,7 @@ public class PlayerCharacter extends GameCharacter {
 		updateAnimation();
 	}
 	
-	private  void updateAnimation(){
+	private void updateAnimation(){
 		 
 		animationDelay++;
 
