@@ -46,7 +46,7 @@ public class CollisionDetector {
 		if(board.player.getHitbox().intersects(board.ghost.getHitbox())) {
 			board.player.stopMoving();
 			board.ghost.stopMoving();
-			
+			board.gameStats.livesLeft--;
 			board.timer.stop();
 		}
 	}

@@ -1,8 +1,12 @@
 package game;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 
 import gameobject.Wall;
 
@@ -15,7 +19,8 @@ public class DrawGame {
 		Graphics2D g2d = (Graphics2D) g;
         
         renderBoard(g2d, board);
-		board.gameStats.renderScore(g2d, board.height);
+		renderScore(g2d, board);
+		renderLives(g2d, board);
 		
 		for (int i = 0; i < board.points.size(); i++) {
 	        	g2d.drawImage(board.points.get(i).getImage(), board.points.get(i).getX_position(), 
@@ -44,6 +49,40 @@ public class DrawGame {
 	private static void CreateBorder(Graphics2D g2d, int width, int height) {
 		g2d.setColor(borderAndFontColor);
 		g2d.drawRect(0, 0, width, height);
+	}
+	
+	public static void renderScore(Graphics2D g, Board board) {
+        String scoreMessage;
+        
+        scoreMessage = "Score: " + board.gameStats.score;        
+        Font scoreFont = new Font("Futura", Font.BOLD, 16);
+
+        g.setFont(scoreFont);
+        g.setColor(new Color(62, 123, 99));
+        g.drawString(scoreMessage, 5, board.height+17);
+    }
+	
+	public static void renderLives(Graphics2D g, Board board) {
+		Image image;
+		ImageIcon icon = new ImageIcon("C:\\Users\\ahroc\\Desktop\\GameAssets\\Player\\Player_Right0.png");
+		image = icon.getImage();
+		
+		String lives = "Lives:";
+		Font scoreFont = new Font("Futura", Font.BOLD, 16);
+		int xPosition = 150; 
+		int livesLeft = board.gameStats.getLivesLeft();
+
+        g.setFont(scoreFont);
+        g.setColor(new Color(62, 123, 99));
+        g.drawString(lives, 100, board.height+17);
+       
+        while(livesLeft>0) {
+        	g.drawImage(image, xPosition, board.height+2, board);
+        	xPosition+=20;
+        	livesLeft--;
+        }
+		
+
 	}
 
 }
