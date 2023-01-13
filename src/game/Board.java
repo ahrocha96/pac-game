@@ -60,6 +60,13 @@ public class Board extends JPanel implements ActionListener{
         timer.start();
 	}
 	
+	public void resetCharacters() {
+		player.setX_position(player.getX_position_start());
+		player.setY_position(player.getY_position_start());
+		ghost.setX_position(ghost.getX_position_start());
+		ghost.setY_position(ghost.getY_position_start());		
+	}
+	
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -71,6 +78,9 @@ public class Board extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent ev) {
+		if(gameStats.livesLeft == 0) {
+			timer.stop();
+		}
 		
 		updateGameObjectTile(player);
 		

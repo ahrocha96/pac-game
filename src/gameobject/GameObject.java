@@ -13,6 +13,8 @@ public abstract class GameObject {
 	protected int y_position;
 	protected int x_direction;
 	protected int y_direction;
+	protected int x_position_start;
+	protected int y_position_start;
 	
 	public int requested_dx = 0;
 	public int requested_dy = 0;	
@@ -36,6 +38,8 @@ public abstract class GameObject {
 	public GameObject(int x_position, int y_position) {
 		this.x_position = x_position;
 		this.y_position = y_position;
+		x_position_start = x_position;
+		y_position_start = y_position;
 		tile_x = x_position / 20;
 		tile_y = y_position / 20;
 	}
@@ -87,6 +91,21 @@ public abstract class GameObject {
 		this.y_position = y_position;
 	}
 
+	public int getX_position_start() {
+		return x_position_start;
+	}
+
+	public void setX_position_start(int x_position) {
+		this.x_position_start = x_position;
+	}
+
+	public int getY_position_start() {
+		return y_position_start;
+	}
+
+	public void setY_position_start(int y_position) {
+		this.y_position_start = y_position;
+	}
 	public Image getImage() {
 		return image;
 	}

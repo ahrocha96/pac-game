@@ -47,7 +47,7 @@ public class CollisionDetector {
 			board.player.stopMoving();
 			board.ghost.stopMoving();
 			board.gameStats.livesLeft--;
-			board.timer.stop();
+			board.resetCharacters();
 		}
 	}
 	    
