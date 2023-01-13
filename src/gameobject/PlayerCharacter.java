@@ -46,7 +46,7 @@ public class PlayerCharacter extends GameCharacter {
 		 
 		animationDelay++;
 
-		 if (animationDelay == 3) {
+		 if (animationDelay == 5) {
 			 if(currentAnimationFrame == 4) {
 				 currentAnimationFrame = 0;
 			 }
@@ -77,19 +77,19 @@ public class PlayerCharacter extends GameCharacter {
 
         int key = e.getKeyCode();
 
-        if (key == KeyEvent.VK_A) {
+        if (key == KeyEvent.VK_A || key == KeyEvent.VK_LEFT) {
         	this.requestDirectionChange("Left");
         }
 
-        if (key == KeyEvent.VK_D) {
+        if (key == KeyEvent.VK_D || key == KeyEvent.VK_RIGHT) {
         	this.requestDirectionChange("Right");
         }
 
-        if (key == KeyEvent.VK_W) {
+        if (key == KeyEvent.VK_W || key == KeyEvent.VK_UP) {
         	this.requestDirectionChange("Up");
         }
 
-        if (key == KeyEvent.VK_S) {
+        if (key == KeyEvent.VK_S || key == KeyEvent.VK_DOWN) {
         	this.requestDirectionChange("Down");
         }
     }
