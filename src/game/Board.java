@@ -24,6 +24,7 @@ import gameobject.Wall;
 public class Board extends JPanel implements ActionListener{
 		
 	boolean gameStarted = false;
+	boolean gameOver = false;
 	
 	public int height;
 	public int width;
@@ -78,7 +79,9 @@ public class Board extends JPanel implements ActionListener{
         if(gameStarted) {
             DrawGame.draw(g, this);  	
         }
-        
+        if(gameOver) {
+        	TransitionScreen.renderGameOverScreen(g, width, height);
+        }
         Toolkit.getDefaultToolkit().sync();
     }
 
@@ -87,6 +90,7 @@ public class Board extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent ev) {
 		
 		if(gameStats.livesLeft == 0) {
+			gameOver = true;
 			timer.stop();
 		}
 		
