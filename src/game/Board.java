@@ -75,8 +75,10 @@ public class Board extends JPanel implements ActionListener{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        TransitionScreen.renderIntroScreen(g, width, height);
-        if(gameStarted) {
+        if(!gameStarted) {
+        	TransitionScreen.renderIntroScreen(g, width, height);
+        }
+        else {
             DrawGame.draw(g, this);  	
         }
         if(gameOver) {
