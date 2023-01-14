@@ -23,6 +23,8 @@ import gameobject.Wall;
 @SuppressWarnings("serial")
 public class Board extends JPanel implements ActionListener{
 		
+	boolean gameStarted = false;
+	
 	public int height;
 	public int width;
 	
@@ -32,6 +34,7 @@ public class Board extends JPanel implements ActionListener{
     List<Point> points;
     HashMap<String, Wall> maze;
     Statistics  gameStats;
+    TransitionScreen intro;
     
     private final int DELAY = 4;
 	
@@ -55,9 +58,9 @@ public class Board extends JPanel implements ActionListener{
         points = new ArrayList<Point>();
         maze = new HashMap<String, Wall>();
         placeGameObjects();
+        intro = new TransitionScreen();
 
         timer = new Timer(DELAY, this);
-        timer.start();
 	}
 	
 	public void resetCharacters() {
@@ -71,13 +74,18 @@ public class Board extends JPanel implements ActionListener{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        DrawGame.draw(g, this);
+        TransitionScreen.renderIntroScreen(g, width, height);
+        if(gameStarted) {
+            DrawGame.draw(g, this);  	
+        }
         
         Toolkit.getDefaultToolkit().sync();
     }
 
+    
 	@Override
 	public void actionPerformed(ActionEvent ev) {
+		
 		if(gameStats.livesLeft == 0) {
 			timer.stop();
 		}
@@ -292,7 +300,13 @@ public class Board extends JPanel implements ActionListener{
     class GameKeyAdapter extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
-            player.keyPressed(e); 
+            if(gameStarted) {
+            	player.keyPressed(e); 
+            }
+            if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            	gameStarted = true;
+            	timer.start();
+            }
         }
     }
 }
