@@ -6,34 +6,32 @@ import gameobject.Wall;
 
 public class CollisionDetector {
 	
-	private static Board board;
-	
-	public static void checkCollisions(Board b) {
-    	board = b;
-		
-		checkBoardBounds();
-    	checkGameObjectWallCollision(board.player);
-    	checkGameObjectWallCollision(board.ghost);
-    	checkPlayerGhostCollision();
-    	checkPlayerPointCollision();	
+	public static void checkCollisions(Board board) {
+    	
+		checkBoardBounds(board.player);
+		checkBoardBounds(board.ghost);
+    	checkGameObjectWallCollision(board, board.player);
+    	checkGameObjectWallCollision(board, board.ghost);
+    	checkPlayerGhostCollision(board);
+    	checkPlayerPointCollision(board);	
+    }
+    
+    public static void checkBoardBounds(GameCharacter c) {
+    	if (c.getX_position() > 540) {
+    		c.setX_position(0);
+    	}
+    	else if (c.getX_position() < 0) {
+    		c.setX_position(540);
+    	}
+    	else if (c.getY_position() > 580) {
+    		c.setY_position(0);
+    	}
+    	else if (c.getY_position() < 0) {
+    		c.setY_position(580);
+    	}
     }
 	
-    public static void checkBoardBounds() {
-    	if (board.player.getX_position() > 540) {
-    		board.player.setX_position(0);
-    	}
-    	else if (board.player.getX_position() < 0) {
-    		board.player.setX_position(540);
-    	}
-    	else if (board.player.getY_position() > 580) {
-    		board.player.setY_position(0);
-    	}
-    	else if (board.player.getY_position() < 0) {
-    		board.player.setY_position(580);
-    	}
-    }
-	
-	public static void checkPlayerPointCollision() {
+	public static void checkPlayerPointCollision(Board board) {
 		for(int i = 0; i < board.points.size(); i++) {
 			if (board.player.getHitbox().intersects(board.points.get(i).getHitbox())) {
 				board.points.remove(i);
@@ -42,7 +40,7 @@ public class CollisionDetector {
 		}
 	}
 	
-	public static void checkPlayerGhostCollision() {
+	public static void checkPlayerGhostCollision(Board board) {
 		if(board.player.getHitbox().intersects(board.ghost.getHitbox())) {
 			board.player.stopMoving();
 			board.ghost.stopMoving();
@@ -51,7 +49,7 @@ public class CollisionDetector {
 		}
 	}
 	    
-	public static void checkGameObjectWallCollision(GameCharacter obj) {
+	public static void checkGameObjectWallCollision(Board board, GameCharacter obj) {
 		for(Wall values : board.maze.values()) {
 			if (obj.getFutureHitbox(obj.getX_Direction(), obj.getY_Direction()).intersects(values.getHitbox())) {
 				obj.stopMoving();
@@ -60,7 +58,7 @@ public class CollisionDetector {
 	}
 	
 	/*This is distinct from checkGameObjectWallCollision to fulfill requested direction changes by the player. Don't use for movement in current direction*/
-	public static boolean checkFutureGameObjectWallCollision(int x_directionToCheck, int y_directionToCheck, GameObject obj) {
+	public static boolean checkFutureGameObjectWallCollision(int x_directionToCheck, int y_directionToCheck, GameObject obj, Board board) {
 		boolean collision = false;
 		
 		for(Wall values : board.maze.values()) {

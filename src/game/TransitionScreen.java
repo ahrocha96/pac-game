@@ -37,7 +37,7 @@ public class TransitionScreen {
 		Font font = new Font("Futura", Font.BOLD, 28);
 
 		g2d.setFont(font);
-		g2d.drawString(instructions, (width / 2)-180, height / 2);
+		g2d.drawString(instructions, (width / 2)-165, height / 2);
 	}
 	private static void CreateGameOver(Graphics2D g2d, int width, int height) {
 		String gameOver = "Game Over";

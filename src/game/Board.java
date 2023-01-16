@@ -35,7 +35,6 @@ public class Board extends JPanel implements ActionListener{
     List<Point> points;
     HashMap<String, Wall> maze;
     Statistics  gameStats;
-    TransitionScreen intro;
     
     private final int DELAY = 4;
 	
@@ -59,7 +58,6 @@ public class Board extends JPanel implements ActionListener{
         points = new ArrayList<Point>();
         maze = new HashMap<String, Wall>();
         placeGameObjects();
-        intro = new TransitionScreen();
 
         timer = new Timer(DELAY, this);
 	}
@@ -135,7 +133,7 @@ public class Board extends JPanel implements ActionListener{
 			 obj.changingDirection = false;
 		 }
 		 
-		 collisionInNewDirection = CollisionDetector.checkFutureGameObjectWallCollision(obj.requested_dx, obj.requested_dy, obj);
+		 collisionInNewDirection = CollisionDetector.checkFutureGameObjectWallCollision(obj.requested_dx, obj.requested_dy, obj, this);
 		 
 		 if (collisionInNewDirection == false) {
 			 obj.setX_direction(obj.requested_dx);
