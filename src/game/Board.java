@@ -25,6 +25,7 @@ public class Board extends JPanel implements ActionListener{
 		
 	boolean gameStarted = false;
 	boolean gameOver = false;
+	boolean levelComplete = false;
 	
 	public int height;
 	public int width;
@@ -82,6 +83,9 @@ public class Board extends JPanel implements ActionListener{
         if(gameOver) {
         	TransitionScreen.renderGameOverScreen(g, width, height);
         }
+        if (levelComplete) {
+        	TransitionScreen.renderVictoryScreen(g, width, height);
+        }
         Toolkit.getDefaultToolkit().sync();
     }
 
@@ -92,6 +96,15 @@ public class Board extends JPanel implements ActionListener{
 		if(gameStats.livesLeft == 0) {
 			gameOver = true;
 			timer.stop();
+		}
+		else if (points.isEmpty()) {
+			levelComplete = true;
+			timer.stop();
+			try {
+				Thread.sleep(700);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		updateGameObjectTile(player);

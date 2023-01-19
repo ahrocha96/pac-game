@@ -24,6 +24,13 @@ public class TransitionScreen {
 		CreateBorder(g2d, width, height);
 		CreateGameOver(g2d, width, height);
 	}
+	public static void renderVictoryScreen(Graphics g, int width, int height) {
+        Graphics2D g2d = (Graphics2D) g;
+
+        CreateBackground(g2d, width, height);
+        CreateBorder(g2d, width, height);
+        CreateVictoryScreen(g2d, width, height);
+    }
 	private static void CreateBackground(Graphics2D g2d, int width, int height){
 		g2d.setColor(backgroundColor);
 		g2d.fillRect(0, 0, width, height);
@@ -45,5 +52,12 @@ public class TransitionScreen {
 
 		g2d.setFont(font);
 		g2d.drawString(gameOver, (width / 2)-80, height / 2);
+	}
+	private static void CreateVictoryScreen(Graphics2D g2d, int width, int height){
+		String victory =  "Level Complete!";
+		Font font = new Font("Futura", Font.BOLD, 28);
+
+		g2d.setFont(font);
+		g2d.drawString(victory, (width / 2)-100, height / 2);
 	}
 }
