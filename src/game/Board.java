@@ -33,6 +33,7 @@ public class Board extends JPanel implements ActionListener{
     Timer timer;
     PlayerCharacter player;
     Enemy ghost;
+    Enemy Blinky;
     List<Point> points;
     HashMap<String, Wall> maze;
     Statistics  gameStats;
@@ -278,14 +279,16 @@ public class Board extends JPanel implements ActionListener{
 				else if(levelData[i][j] == 'g') {
 					ghost = new Enemy(j*20, i*20);
 				}
-							
+				else if(levelData[i][j] == 'B') {
+					Blinky = new Enemy(j*20, i*20);
+				}	
 			}
 		}
 	}
 	
 	private char[][] levelData = {{'w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w'},
 			{'w','p','p','p','p','p','p','p','p','p','p','p','p','w','w','p','p','p','p','p','p','p','p','p','p','p','p','w'},
-			{'w','p','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','p','w'},
+			{'w','B','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','p','w'},
 			{'w','p','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','p','w'},
 			{'w','p','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','p','w'},
 			{'w','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','w'},

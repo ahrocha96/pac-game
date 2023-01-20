@@ -34,7 +34,10 @@ public class DrawGame {
         		board.player.getY_position(), board);
         
         g2d.drawImage(board.ghost.getImage(), board.ghost.getX_position(), 
-        		board.ghost.getY_position(), board);    
+        		board.ghost.getY_position(), board); 
+        
+        g2d.drawImage(board.Blinky.getImage(), board.Blinky.getX_position(), 
+        		board.Blinky.getY_position(), board); 
 	}
 	
 	public static void renderBoard(Graphics2D g2d, Board board) {	
