@@ -26,6 +26,10 @@ public class DrawGame {
 	        	g2d.drawImage(board.points.get(i).getImage(), board.points.get(i).getX_position(), 
 	        			board.points.get(i).getY_position(), board);
 		}
+		for (int i = 0; i < board.doors.size(); i++) {
+        	g2d.drawImage(board.doors.get(i).getImage(), board.doors.get(i).getX_position(), 
+        			board.doors.get(i).getY_position(), board);
+		}
 		for (Wall values : board.maze.values() ) {
 	        	g2d.drawImage(values.getImage(), values.getX_position(), 
 	            		values.getY_position(), board);
@@ -37,7 +41,13 @@ public class DrawGame {
         		board.ghost.getY_position(), board); 
         
         g2d.drawImage(board.Blinky.getImage(), board.Blinky.getX_position(), 
-        		board.Blinky.getY_position(), board); 
+        		board.Blinky.getY_position(), board);
+        g2d.drawImage(board.Inky.getImage(), board.Inky.getX_position(), 
+        		board.Inky.getY_position(), board); 
+        g2d.drawImage(board.Pinky.getImage(), board.Pinky.getX_position(), 
+        		board.Pinky.getY_position(), board); 
+        g2d.drawImage(board.Clyde.getImage(), board.Clyde.getX_position(), 
+        		board.Clyde.getY_position(), board); 
 	}
 	
 	public static void renderBoard(Graphics2D g2d, Board board) {	

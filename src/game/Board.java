@@ -14,6 +14,7 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import gameobject.Door;
 import gameobject.Enemy;
 import gameobject.GameObject;
 import gameobject.PlayerCharacter;
@@ -34,7 +35,11 @@ public class Board extends JPanel implements ActionListener{
     PlayerCharacter player;
     Enemy ghost;
     Enemy Blinky;
+    Enemy Inky;
+    Enemy Pinky;
+    Enemy Clyde;
     List<Point> points;
+    List<Door> doors;
     HashMap<String, Wall> maze;
     Statistics  gameStats;
     
@@ -58,6 +63,7 @@ public class Board extends JPanel implements ActionListener{
         
         tiles = new Tile[height/20][width/20];
         points = new ArrayList<Point>();
+        doors = new ArrayList<Door>();
         maze = new HashMap<String, Wall>();
         placeGameObjects();
 
@@ -269,6 +275,10 @@ public class Board extends JPanel implements ActionListener{
 					Wall w = new Wall(j*20, i*20);
 					maze.put(Integer.toString(j) + "-" + Integer.toString(i), w);
 				}
+				if(levelData[i][j] == 'd') {
+					Door d = new Door(j*20, i*20);
+					doors.add(d);
+				}
 				else if (levelData[i][j] == 'c'){
 					player = new PlayerCharacter(j*20, i*20);
 				}
@@ -282,13 +292,28 @@ public class Board extends JPanel implements ActionListener{
 				else if(levelData[i][j] == 'B') {
 					Blinky = new Enemy(j*20, i*20);
 				}	
+				else if(levelData[i][j] == 'P') {
+					Pinky = new Enemy(j*20, i*20);
+				}	
+				else if(levelData[i][j] == 'I') {
+					Inky = new Enemy(j*20, i*20);
+				}	
+				else if(levelData[i][j] == 'C') {
+					Clyde = new Enemy(j*20, i*20);
+				}
 			}
 		}
 	}
+	//w = wall
+	//p = point
+	//e = empty
+	//B = Blinky, P = Pinky, I = Inky, C = Clyde
+	//c = Player Character
+	//d = door
 	
 	private char[][] levelData = {{'w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w'},
 			{'w','p','p','p','p','p','p','p','p','p','p','p','p','w','w','p','p','p','p','p','p','p','p','p','p','p','p','w'},
-			{'w','B','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','p','w'},
+			{'w','p','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','p','w'},
 			{'w','p','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','p','w'},
 			{'w','p','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','p','w'},
 			{'w','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','w'},
@@ -298,9 +323,9 @@ public class Board extends JPanel implements ActionListener{
 			{'w','w','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','e','e','e','e','e','e','e','e','e','w','w','p','w','w','w','w','w','w'},
-			{'w','w','w','w','w','w','p','w','w','e','w','w','w','w','w','w','w','w','e','w','w','p','w','w','w','w','w','w'},
+			{'w','w','w','w','w','w','p','w','w','e','w','w','w','d','d','w','w','w','e','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','w','e','e','e','e','e','e','w','e','w','w','p','w','w','w','w','w','w'},
-			{'e','e','e','e','e','e','p','e','e','e','w','e','e','e','e','e','e','w','e','e','e','p','e','e','e','e','e','e'},
+			{'e','e','e','e','e','e','p','e','e','e','w','e','P','B','I','C','e','w','e','e','e','p','e','e','e','e','e','e'},
 			{'w','w','w','w','w','w','p','w','w','e','w','e','e','e','e','e','e','w','e','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','w','w','w','w','w','w','w','w','e','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','e','e','e','e','e','e','e','e','e','w','w','p','w','w','w','w','w','w'},
