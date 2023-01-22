@@ -153,7 +153,8 @@ public class Board extends JPanel implements ActionListener{
 			 obj.changingDirection = false;
 		 }
 		 
-		 collisionInNewDirection = CollisionDetector.checkFutureGameObjectWallCollision(obj.requested_dx, obj.requested_dy, obj, this);
+		 collisionInNewDirection = CollisionDetector.checkFutureGameObjectWallCollision(obj.requested_dx, obj.requested_dy, obj, this)
+				 				|| CollisionDetector.checkFutureGameObjectDoorCollision(obj.requested_dx, obj.requested_dy, obj, this);
 		 
 		 if (collisionInNewDirection == false) {
 			 obj.setX_direction(obj.requested_dx);

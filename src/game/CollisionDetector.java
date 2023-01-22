@@ -12,6 +12,7 @@ public class CollisionDetector {
 		checkBoardBounds(board.ghost);
     	checkGameObjectWallCollision(board, board.player);
     	checkGameObjectWallCollision(board, board.ghost);
+    	checkGameObjectDoorCollision(board, board.player);
     	checkPlayerGhostCollision(board);
     	checkPlayerPointCollision(board);	
     }
@@ -57,6 +58,15 @@ public class CollisionDetector {
 		}	
 	}
 	
+	public static void checkGameObjectDoorCollision(Board board, GameCharacter obj) {
+		for(int i = 0; i < board.doors.size(); i++) {
+			if (obj.getY_position() < board.doors.get(i).getY_position() - 20
+			&&  obj.getFutureHitbox(obj.getX_Direction(), obj.getY_Direction()).intersects(board.doors.get(i).getHitbox())) {
+				obj.stopMoving();
+			}
+		}
+	}
+	
 	/*This is distinct from checkGameObjectWallCollision to fulfill requested direction changes by the player. Don't use for movement in current direction*/
 	public static boolean checkFutureGameObjectWallCollision(int x_directionToCheck, int y_directionToCheck, GameObject obj, Board board) {
 		boolean collision = false;
@@ -68,4 +78,16 @@ public class CollisionDetector {
 		}
 		return collision;
 	}
+	
+	public static boolean checkFutureGameObjectDoorCollision(int x_directionToCheck, int y_directionToCheck, GameObject obj, Board board) {
+		boolean collision = false;
+		
+		for(int i = 0; i < board.doors.size(); i++) {
+			if (obj.getFutureHitbox(x_directionToCheck, y_directionToCheck).intersects(board.doors.get(i).getHitbox())) {
+				collision = true;
+			}
+		}
+		return collision;
+	}
+	
 }
