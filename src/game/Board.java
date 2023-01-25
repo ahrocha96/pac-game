@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -284,6 +285,11 @@ public class Board extends JPanel implements ActionListener{
 					Wall w = new Wall(j*20, i*20);
 					maze.put(Integer.toString(j) + "-" + Integer.toString(i), w);
 				}
+				if(levelData[i][j] == 'W') {
+					Wall w = new Wall(j*20, i*20);
+					w.setIcon(new ImageIcon("C:\\Users\\ahroc\\Desktop\\GameAssets\\Player\\InvisibleWall.png"));
+					maze.put(Integer.toString(j) + "-" + Integer.toString(i), w);
+				}
 				if(levelData[i][j] == 'd') {
 					Door d = new Door(j*20, i*20);
 					doors.add(d);
@@ -333,9 +339,9 @@ public class Board extends JPanel implements ActionListener{
 			{'w','w','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','e','e','e','e','e','e','e','e','e','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','w','w','w','d','d','w','w','w','e','w','w','p','w','w','w','w','w','w'},
-			{'w','w','w','w','w','w','p','w','w','e','w','w','w','e','e','w','w','w','e','w','w','p','w','w','w','w','w','w'},
+			{'w','w','w','w','w','w','p','w','w','e','w','W','W','e','e','W','W','w','e','w','w','p','w','w','w','w','w','w'},
 			{'e','e','e','e','e','e','p','e','e','e','w','e','e','e','g','e','e','w','e','e','e','p','e','e','e','e','e','e'},
-			{'w','w','w','w','w','w','p','w','w','e','w','w','w','w','w','w','w','w','e','w','w','p','w','w','w','w','w','w'},
+			{'w','w','w','w','w','w','p','w','w','e','w','W','W','W','W','W','W','w','e','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','w','w','w','w','w','w','w','w','e','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','e','e','e','e','e','e','e','e','e','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','w','w','w','w','w','w','w','w','e','w','w','p','w','w','w','w','w','w'},

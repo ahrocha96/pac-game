@@ -130,6 +130,15 @@ public abstract class GameObject {
 		this.tile_y = tile_y;
 	}
 
+	public ImageIcon getIcon() {
+		return icon;
+	}
+	
+	public void setIcon(ImageIcon icon) {
+		this.icon = icon;
+		loadImage();
+	}
+	
 	public Rectangle getHitbox() {
 		return hitbox;
 	}
