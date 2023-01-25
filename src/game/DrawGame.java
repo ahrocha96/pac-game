@@ -39,7 +39,7 @@ public class DrawGame {
         
         g2d.drawImage(board.ghost.getImage(), board.ghost.getX_position(), 
         		board.ghost.getY_position(), board); 
-        
+     /*   
         g2d.drawImage(board.Blinky.getImage(), board.Blinky.getX_position(), 
         		board.Blinky.getY_position(), board);
         g2d.drawImage(board.Inky.getImage(), board.Inky.getX_position(), 
@@ -47,7 +47,7 @@ public class DrawGame {
         g2d.drawImage(board.Pinky.getImage(), board.Pinky.getX_position(), 
         		board.Pinky.getY_position(), board); 
         g2d.drawImage(board.Clyde.getImage(), board.Clyde.getX_position(), 
-        		board.Clyde.getY_position(), board); 
+        		board.Clyde.getY_position(), board); */
 	}
 	
 	public static void renderBoard(Graphics2D g2d, Board board) {	

@@ -10,6 +10,7 @@ public class Enemy extends GameCharacter {
 	String iconFileName;
 	public String currentDirection;
 	public boolean canChangeDirection = false;
+	public boolean exitedBox = false;
 		
 	public int currentAnimationFrame;
 	private int animationDelay = 0;
@@ -45,8 +46,7 @@ public class Enemy extends GameCharacter {
 		setY_direction(0);
 		updateAnimation();
 	}
-	
-	
+		
 	@Override
 	public Rectangle updateHitbox(int x_pos, int y_pos) {
 		return hitbox = new Rectangle(x_pos, y_pos, width-6, height-3);

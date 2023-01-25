@@ -114,13 +114,22 @@ public class Board extends JPanel implements ActionListener{
 			}
 		}
 		
+		if(!ghost.exitedBox) {
+			determineGhostPath(doors.get(0).getTile_x(), doors.get(0).getTile_y()-1);
+			CollisionDetector.checkGhostExit(this);
+		}
+		else {
+			determineGhostPath(player.getTile_x(), player.getTile_y());
+		}
 		updateGameObjectTile(player);
 		
+		//OLD TILE POSITION (after the first loop)
 		int gx = ghost.getTile_x();
 		int gy = ghost.getTile_y();
 		
 		updateGameObjectTile(ghost);
 		
+		//NEW TILE POSITION
 		int gx2 = ghost.getTile_x();
 		int gy2 = ghost.getTile_y();
 		
@@ -140,7 +149,7 @@ public class Board extends JPanel implements ActionListener{
 		}
 		
 		player.move();
-    	determineGhostPath();
+    
     	ghost.move();
 		repaint();
 	}
@@ -164,37 +173,35 @@ public class Board extends JPanel implements ActionListener{
 		 }
 	}
 	
-    private void determineGhostPath() {
-    	int px = player.getTile_x();
-    	int py = player.getTile_y();
+    private void determineGhostPath(int targetX, int targetY) {
     	
     	int gx = ghost.getTile_x();
     	int gy = ghost.getTile_y();
     	    	
     	if(ghost.canChangeDirection || !ghost.moving()) {
     	    
-    		if(px > gx && py < gy) {
+    		if(targetX > gx && targetY < gy) {
     			checkGhostDirectionOrder("Up", "Right", "Down", "Left");
         	}
-        	else if(px < gx && py < gy) {
+        	else if(targetX < gx && targetY < gy) {
     			checkGhostDirectionOrder("Up", "Left", "Down", "Right");	
     		}
-        	else if(px > gx && py == gy) {
+        	else if(targetX > gx && targetY == gy) {
     			checkGhostDirectionOrder("Right", "Up", "Left", "Down");
     		}
-        	else if(px < gx && py == gy) {
+        	else if(targetX < gx && targetY == gy) {
     			checkGhostDirectionOrder("Left", "Down", "Right", "Up");
     		}
-        	else if(px < gx && py > gy) {
+        	else if(targetX < gx && targetY > gy) {
     			checkGhostDirectionOrder("Down", "Left", "Right", "Up");
     		}
-        	else if(px > gx && py > gy) {
+        	else if(targetX > gx && targetY > gy) {
     			checkGhostDirectionOrder("Down", "Right", "Left", "Up");
     		}
-        	else if(px == gx && py < gy) {
+        	else if(targetX == gx && targetY < gy) {
     			checkGhostDirectionOrder("Up", "Right", "Down", "Left");
     		}
-        	else if(px == gx && py > gy) {
+        	else if(targetX == gx && targetY > gy) {
     			checkGhostDirectionOrder("Down", "Left", "Up", "Right");
     		}	
     		ghost.canChangeDirection = false;
@@ -251,7 +258,8 @@ public class Board extends JPanel implements ActionListener{
     	
     	String mazeKey = Integer.toString(tilex) + "-" + Integer.toString(tiley);
    
-    	return !maze.containsKey(mazeKey) && !ghost.objectDirection.equals(opposite);
+    	return (!maze.containsKey(mazeKey) && !ghost.objectDirection.equals(opposite))
+    			|| !ghost.moving();
     }
     
     private void updateGameObjectTile(GameObject obj){
@@ -290,7 +298,7 @@ public class Board extends JPanel implements ActionListener{
 				else if(levelData[i][j] == 'g') {
 					ghost = new Enemy(j*20, i*20);
 				}
-				else if(levelData[i][j] == 'B') {
+				/*else if(levelData[i][j] == 'B') {
 					Blinky = new Enemy(j*20, i*20);
 				}	
 				else if(levelData[i][j] == 'P') {
@@ -301,7 +309,7 @@ public class Board extends JPanel implements ActionListener{
 				}	
 				else if(levelData[i][j] == 'C') {
 					Clyde = new Enemy(j*20, i*20);
-				}
+				}*/
 			}
 		}
 	}
@@ -325,9 +333,9 @@ public class Board extends JPanel implements ActionListener{
 			{'w','w','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','e','e','e','e','e','e','e','e','e','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','w','w','w','d','d','w','w','w','e','w','w','p','w','w','w','w','w','w'},
-			{'w','w','w','w','w','w','p','w','w','e','w','e','e','e','e','e','e','w','e','w','w','p','w','w','w','w','w','w'},
-			{'e','e','e','e','e','e','p','e','e','e','w','e','P','B','I','C','e','w','e','e','e','p','e','e','e','e','e','e'},
-			{'w','w','w','w','w','w','p','w','w','e','w','e','e','e','e','e','e','w','e','w','w','p','w','w','w','w','w','w'},
+			{'w','w','w','w','w','w','p','w','w','e','w','w','w','e','e','w','w','w','e','w','w','p','w','w','w','w','w','w'},
+			{'e','e','e','e','e','e','p','e','e','e','w','e','e','e','g','e','e','w','e','e','e','p','e','e','e','e','e','e'},
+			{'w','w','w','w','w','w','p','w','w','e','w','w','w','w','w','w','w','w','e','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','w','w','w','w','w','w','w','w','e','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','e','e','e','e','e','e','e','e','e','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','w','w','w','w','w','w','w','w','e','w','w','p','w','w','w','w','w','w'},
@@ -335,12 +343,12 @@ public class Board extends JPanel implements ActionListener{
 			{'w','p','p','p','p','p','p','p','p','p','p','p','p','w','w','p','p','p','p','p','p','p','p','p','p','p','p','w'},
 			{'w','p','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','p','w'},
 			{'w','p','w','w','w','w','p','w','w','w','w','w','p','w','w','p','w','w','w','w','w','p','w','w','w','w','p','w'},
-			{'w','p','p','p','w','w','p','p','p','p','p','p','p','p','c','p','p','p','p','p','p','p','w','w','p','p','p','w'},
+			{'w','p','p','p','w','w','p','p','p','p','p','c','p','p','p','p','p','p','p','p','p','p','w','w','p','p','p','w'},
 			{'w','w','w','p','w','w','p','w','w','p','w','w','w','w','w','w','w','w','p','w','w','p','w','w','p','w','w','w'},
 			{'w','p','p','p','p','p','p','w','w','p','p','p','p','w','w','p','p','p','p','w','w','p','p','p','p','p','p','w'},
 			{'w','p','w','w','w','w','w','w','w','w','w','w','p','w','w','p','w','w','w','w','w','w','w','w','w','w','p','w'},
 			{'w','p','w','w','w','w','w','w','w','w','w','w','p','w','w','p','w','w','w','w','w','w','w','w','w','w','p','w'},
-			{'w','g','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','w'},
+			{'w','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','p','w'},
 			{'w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w','w'}};
 
     class GameKeyAdapter extends KeyAdapter {

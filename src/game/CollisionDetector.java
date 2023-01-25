@@ -40,11 +40,17 @@ public class CollisionDetector {
 			}
 		}
 	}
+	public static void checkGhostExit(Board board) {
+		if (board.ghost.getHitbox().intersects(board.tiles[board.doors.get(0).getTile_y()-1][board.doors.get(0).getTile_x()].getHitbox())) {
+				board.ghost.exitedBox = true;
+		}
+	}
 	
 	public static void checkPlayerGhostCollision(Board board) {
 		if(board.player.getHitbox().intersects(board.ghost.getHitbox())) {
 			board.player.stopMoving();
 			board.ghost.stopMoving();
+			board.ghost.exitedBox = false;
 			board.gameStats.livesLeft--;
 			board.resetCharacters();
 		}
