@@ -287,7 +287,7 @@ public class Board extends JPanel implements ActionListener{
 				}
 				if(levelData[i][j] == 'W') {
 					Wall w = new Wall(j*20, i*20);
-					w.setIcon(new ImageIcon("C:\\Users\\ahroc\\Desktop\\GameAssets\\Player\\InvisibleWall.png"));
+					w.setIcon(new ImageIcon(getClass().getResource("/assets/InvisibleWall.png")));
 					maze.put(Integer.toString(j) + "-" + Integer.toString(i), w);
 				}
 				if(levelData[i][j] == 'd') {

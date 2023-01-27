@@ -15,8 +15,8 @@ public class PlayerCharacter extends GameCharacter {
 	
 	public PlayerCharacter(int starting_x_position, int starting_y_position) {
 		super(starting_x_position, starting_y_position);
-		icon = new ImageIcon("C:\\Users\\ahroc\\Desktop\\GameAssets\\Player\\Player_Right0.png");
-		iconFileLocation = "C:\\Users\\ahroc\\Desktop\\GameAssets\\Player\\";
+		icon = new ImageIcon(getClass().getResource("/assets/Player/Player_Right0.png"));
+		iconFileLocation = "/assets/Player/";
 		objectDirection = "Right";
 		name = "Player";
 		currentAnimationFrame = 0;
@@ -57,7 +57,7 @@ public class PlayerCharacter extends GameCharacter {
 		 }
         
         updateIconFile(iconFileLocation, objectDirection, currentAnimationFrame);
-        icon = new ImageIcon(iconFileName);
+        icon = new ImageIcon(getClass().getResource(iconFileName));
         loadImage();
 	}
 		

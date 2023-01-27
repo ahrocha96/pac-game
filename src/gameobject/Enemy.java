@@ -17,8 +17,8 @@ public class Enemy extends GameCharacter {
 		
 	public Enemy(int starting_x_position, int starting_y_position, String GhostName) {
 		super(starting_x_position, starting_y_position);
-		icon = new ImageIcon("C:\\Users\\ahroc\\Desktop\\GameAssets\\Ghosts\\"+GhostName+".png");
-		iconFileLocation = "C:\\Users\\ahroc\\Desktop\\GameAssets\\Ghosts\\";
+		icon = new ImageIcon(getClass().getResource("/assets/Ghosts/"+GhostName+".png"));
+		iconFileLocation = "/assets/Ghosts/";
 		currentDirection = "Player_Right";
 		objectDirection = "Right";
 		name = "Enemy";
