@@ -302,19 +302,19 @@ public class Board extends JPanel implements ActionListener{
 					points.add(p);
 				}
 				else if(levelData[i][j] == 'g') {
-					ghost = new Enemy(j*20, i*20);
+					ghost = new Enemy(j*20, i*20, "Clyde");
 				}
-				/*else if(levelData[i][j] == 'B') {
-					Blinky = new Enemy(j*20, i*20);
+				else if(levelData[i][j] == 'B') {
+					Blinky = new Enemy(j*20, i*20, "Blinky");
 				}	
 				else if(levelData[i][j] == 'P') {
-					Pinky = new Enemy(j*20, i*20);
+					Pinky = new Enemy(j*20, i*20, "Pinky");
 				}	
 				else if(levelData[i][j] == 'I') {
-					Inky = new Enemy(j*20, i*20);
+					Inky = new Enemy(j*20, i*20, "Inky");
 				}	
-				else if(levelData[i][j] == 'C') {
-					Clyde = new Enemy(j*20, i*20);
+				/*else if(levelData[i][j] == 'C') {
+					Clyde = new Enemy(j*20, i*20, "Clyde");
 				}*/
 			}
 		}
@@ -340,7 +340,7 @@ public class Board extends JPanel implements ActionListener{
 			{'w','w','w','w','w','w','p','w','w','e','e','e','e','e','e','e','e','e','e','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','w','w','w','d','d','w','w','w','e','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','w','W','W','e','e','W','W','w','e','w','w','p','w','w','w','w','w','w'},
-			{'e','e','e','e','e','e','p','e','e','e','w','e','e','e','g','e','e','w','e','e','e','p','e','e','e','e','e','e'},
+			{'e','e','e','e','e','e','p','e','e','e','w','e','I','B','g','P','e','w','e','e','e','p','e','e','e','e','e','e'},
 			{'w','w','w','w','w','w','p','w','w','e','w','W','W','W','W','W','W','w','e','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','w','w','w','w','w','w','w','w','e','w','w','p','w','w','w','w','w','w'},
 			{'w','w','w','w','w','w','p','w','w','e','e','e','e','e','e','e','e','e','e','w','w','p','w','w','w','w','w','w'},

@@ -15,10 +15,10 @@ public class Enemy extends GameCharacter {
 	public int currentAnimationFrame;
 	private int animationDelay = 0;
 		
-	public Enemy(int starting_x_position, int starting_y_position) {
+	public Enemy(int starting_x_position, int starting_y_position, String GhostName) {
 		super(starting_x_position, starting_y_position);
-		icon = new ImageIcon("C:\\Users\\ahroc\\Desktop\\GameAssets\\Player\\Player_Left0.png");
-		iconFileLocation = "C:\\Users\\ahroc\\Desktop\\GameAssets\\Player\\";
+		icon = new ImageIcon("C:\\Users\\ahroc\\Desktop\\GameAssets\\Ghosts\\"+GhostName+".png");
+		iconFileLocation = "C:\\Users\\ahroc\\Desktop\\GameAssets\\Ghosts\\";
 		currentDirection = "Player_Right";
 		objectDirection = "Right";
 		name = "Enemy";
