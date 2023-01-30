@@ -17,6 +17,7 @@ import javax.swing.Timer;
 
 import gameobject.Door;
 import gameobject.Enemy;
+import gameobject.GameCharacter;
 import gameobject.GameObject;
 import gameobject.PlayerCharacter;
 import gameobject.Point;
@@ -72,10 +73,13 @@ public class Board extends JPanel implements ActionListener{
 	}
 	
 	public void resetCharacters() {
-		player.setX_position(player.getX_position_start());
-		player.setY_position(player.getY_position_start());
-		ghost.setX_position(ghost.getX_position_start());
-		ghost.setY_position(ghost.getY_position_start());		
+		setCharacterPosition(player);
+		setCharacterPosition(ghost);
+	}
+	
+	public void setCharacterPosition(GameCharacter character) {
+		character.setX_position(character.getX_position_start());
+		character.setY_position(character.getY_position_start());
 	}
 	
     @Override
