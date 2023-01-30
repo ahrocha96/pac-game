@@ -46,6 +46,7 @@ public class Board extends JPanel implements ActionListener{
     Statistics  gameStats;
     
     private final int DELAY = 4;
+    int ghostReleaseDelay = 0;
 	
     //These are used for placement of the GameObjects, and some collision detection
 	Tile[][] tiles;
@@ -75,6 +76,7 @@ public class Board extends JPanel implements ActionListener{
 	public void resetCharacters() {
 		setCharacterPosition(player);
 		setCharacterPosition(ghost);
+		ghostReleaseDelay = 0;
 	}
 	
 	public void setCharacterPosition(GameCharacter character) {
@@ -120,8 +122,10 @@ public class Board extends JPanel implements ActionListener{
 		}
 		
 		if(!ghost.exitedBox) {
-			determineGhostPath(doors.get(0).getTile_x(), doors.get(0).getTile_y()-1);
-			CollisionDetector.checkGhostExit(this);
+			if(ghostReleaseDelay > 400) {
+				determineGhostPath(doors.get(0).getTile_x(), doors.get(0).getTile_y()-1);
+				CollisionDetector.checkGhostExit(this);
+			}
 		}
 		else {
 			determineGhostPath(player.getTile_x(), player.getTile_y());
@@ -154,9 +158,10 @@ public class Board extends JPanel implements ActionListener{
 		}
 		
 		player.move();
-    
     	ghost.move();
 		repaint();
+		
+		ghostReleaseDelay += 4;
 	}
 	
 	private void processGameObjectDirectionChange(GameObject obj){
