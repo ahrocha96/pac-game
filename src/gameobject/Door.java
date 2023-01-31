@@ -10,8 +10,6 @@ public class Door extends GameObject{
 		super(starting_x_pos, starting_y_pos);
 		icon = new ImageIcon(getClass().getResource("/assets/Door.png"));
 		name = "Door";
-		x_direction = 0;
-		y_direction = 0;
 		loadImage();
 		hitbox = new Rectangle(starting_x_pos, starting_y_pos, width, height);
 	}

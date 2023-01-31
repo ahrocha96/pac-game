@@ -75,25 +75,21 @@ public class CollisionDetector {
 	
 	/*This is distinct from checkGameObjectWallCollision to fulfill requested direction changes by the player. Don't use for movement in current direction*/
 	public static boolean checkFutureGameObjectWallCollision(int x_directionToCheck, int y_directionToCheck, GameObject obj, Board board) {
-		boolean collision = false;
-		
 		for(Wall values : board.maze.values()) {
 			if (obj.getFutureHitbox(x_directionToCheck, y_directionToCheck).intersects(values.getHitbox())) {
-				collision = true;
+				return true;
 			}
 		}
-		return collision;
+		return false;
 	}
 	
 	public static boolean checkFutureGameObjectDoorCollision(int x_directionToCheck, int y_directionToCheck, GameObject obj, Board board) {
-		boolean collision = false;
-		
 		for(int i = 0; i < board.doors.size(); i++) {
 			if (obj.getFutureHitbox(x_directionToCheck, y_directionToCheck).intersects(board.doors.get(i).getHitbox())) {
-				collision = true;
+				return true;
 			}
 		}
-		return collision;
+		return false;
 	}
 	
 }
