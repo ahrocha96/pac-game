@@ -45,7 +45,7 @@ public class Board extends JPanel implements ActionListener{
     HashMap<String, Wall> maze;
     Statistics  gameStats;
     
-    private final int DELAY = 4;
+    private final int DELAY = 1;
     int ghostReleaseDelay = 0;
 	
     //These are used for placement of the GameObjects, and some collision detection
@@ -158,12 +158,25 @@ public class Board extends JPanel implements ActionListener{
 		}
 		
 		player.move();
+		
+		if(inTunnel(ghost)) {
+			if (ghost.objectDirection.equals("Right"))
+				ghost.setX_direction(1);
+			else 
+				ghost.setX_direction(-1);
+		}
     	ghost.move();
+    	
 		repaint();
 		
 		ghostReleaseDelay += 4;
 	}
 	
+	private boolean inTunnel(GameCharacter character) {
+		return character.getY_position() == (14*Constants.TILE_SIZE) && 
+				((character.getX_position() >= 0 && character.getX_position() <= (5*Constants.TILE_SIZE)) || 
+				(character.getX_position() >= (22*Constants.TILE_SIZE) && character.getX_position() <= (27*Constants.TILE_SIZE)));
+	}
 	private void processGameObjectDirectionChange(GameObject obj){
 		 boolean collisionInNewDirection = false;
 

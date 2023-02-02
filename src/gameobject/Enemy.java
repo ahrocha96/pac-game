@@ -1,11 +1,10 @@
 package gameobject;
 
 import java.awt.Rectangle;
-
 import javax.swing.ImageIcon;
 
 public class Enemy extends GameCharacter {
-
+	
 	String iconFileLocation;
 	String iconFileName;
 	public String currentDirection;
@@ -29,8 +28,7 @@ public class Enemy extends GameCharacter {
 
 	}
 	
-	public void move() {	
-		
+	public void move() {
 		x_position += x_direction;
 		y_position += y_direction;
 
@@ -69,6 +67,6 @@ public class Enemy extends GameCharacter {
         //updateIconFile(iconFileLocation, currentDirection, currentAnimationFrame);
         //icon = new ImageIcon(iconFileName);
         loadImage();
-	}
+	}	
 
 }
